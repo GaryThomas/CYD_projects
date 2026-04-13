@@ -36,7 +36,7 @@ XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
 
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
-#define FONT_SIZE 2
+#define FONT_SIZE 4
 
 // Touchscreen coordinates: (x, y) and pressure (z)
 int x, y, z;
@@ -57,8 +57,8 @@ void printTouchToSerial(int touchX, int touchY, int touchZ)
 void printTouchToDisplay(int touchX, int touchY, int touchZ)
 {
     // Clear TFT screen
-    tft.fillScreen(TFT_WHITE);
-    tft.setTextColor(TFT_BLACK, TFT_WHITE);
+    tft.fillScreen(TFT_BLACK);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
     int centerX = SCREEN_WIDTH / 2;
     int textY = 80;
@@ -81,8 +81,7 @@ void setup()
 
     // Start the SPI for the touchscreen and init the touchscreen
     touchscreenSPI.begin(XPT2046_CLK, XPT2046_MISO, XPT2046_MOSI, XPT2046_CS);
-    // touchscreen.begin(touchscreenSPI);
-    touchscreen.begin();
+    touchscreen.begin(touchscreenSPI);
     // Set the Touchscreen rotation in landscape mode
     // Note: in some displays, the touchscreen might be upside down, so you might need to set the rotation to 3: touchscreen.setRotation(3);
     touchscreen.setRotation(1);
@@ -93,8 +92,7 @@ void setup()
     tft.setRotation(1);
 
     // Clear the screen before writing to it
-    tft.fillScreen(TFT_WHITE);
-    tft.setTextColor(TFT_BLACK, TFT_WHITE);
+    tft.fillScreen(TFT_BLACK);
 
     // Set X and Y coordinates for center of display
     int centerX = SCREEN_WIDTH / 2;
