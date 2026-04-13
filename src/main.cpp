@@ -1,121 +1,157 @@
-#include <Arduino.h>
+/*********
+  Rui Santos
+  Complete project details at http://randomnerdtutorials.com
+*********/
 
-/*  Rui Santos & Sara Santos - Random Nerd Tutorials
-    THIS EXAMPLE WAS TESTED WITH THE FOLLOWING HARDWARE:
-    1) ESP32-2432S028R 2.8 inch 240×320 also known as the Cheap Yellow Display (CYD): https://makeradvisor.com/tools/cyd-cheap-yellow-display-esp32-2432s028r/
-      SET UP INSTRUCTIONS: https://RandomNerdTutorials.com/cyd/
-    2) REGULAR ESP32 Dev Board + 2.8 inch 240x320 TFT Display: https://makeradvisor.com/tools/2-8-inch-ili9341-tft-240x320/ and https://makeradvisor.com/tools/esp32-dev-board-wi-fi-bluetooth/
-      SET UP INSTRUCTIONS: https://RandomNerdTutorials.com/esp32-tft/
-    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
-    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
+// Load Wi-Fi library
+#include <WiFi.h>
 
-#include <SPI.h>
+// Replace with your network credentials
+const char* ssid = "Chez Thomas";
+const char* password = "2625426254";
 
-/*  Install the "TFT_eSPI" library by Bodmer to interface with the TFT Display - https://github.com/Bodmer/TFT_eSPI
-    *** IMPORTANT: User_Setup.h available on the internet will probably NOT work with the examples available at Random Nerd Tutorials ***
-    *** YOU MUST USE THE User_Setup.h FILE PROVIDED IN THE LINK BELOW IN ORDER TO USE THE EXAMPLES FROM RANDOM NERD TUTORIALS ***
-    FULL INSTRUCTIONS AVAILABLE ON HOW CONFIGURE THE LIBRARY: https://RandomNerdTutorials.com/cyd/ or https://RandomNerdTutorials.com/esp32-tft/   */
-#include <TFT_eSPI.h>
+// Set web server port number to 80
+WiFiServer server(80);
 
-// Install the "XPT2046_Touchscreen" library by Paul Stoffregen to use the Touchscreen - https://github.com/PaulStoffregen/XPT2046_Touchscreen
-// Note: this library doesn't require further configuration
-#include <XPT2046_Touchscreen.h>
+// Variable to store the HTTP request
+String header;
 
-TFT_eSPI tft = TFT_eSPI();
+// Auxiliar variables to store the current output state
+String output26State = "off";
+String output27State = "off";
 
-// Touchscreen pins
-#define XPT2046_IRQ 36 // T_IRQ
-#define XPT2046_MOSI 32 // T_DIN
-#define XPT2046_MISO 39 // T_OUT
-#define XPT2046_CLK 25 // T_CLK
-#define XPT2046_CS 33 // T_CS
+// Assign output variables to GPIO pins
+const int output26 = 26;
+const int output27 = 27;
 
-SPIClass touchscreenSPI = SPIClass(VSPI);
-XPT2046_Touchscreen touchscreen(XPT2046_CS, XPT2046_IRQ);
-
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
-#define FONT_SIZE 4
-
-// Touchscreen coordinates: (x, y) and pressure (z)
-int x, y, z;
-
-// Print Touchscreen info about X, Y and Pressure (Z) on the Serial Monitor
-void printTouchToSerial(int touchX, int touchY, int touchZ)
-{
-    Serial.print("X = ");
-    Serial.print(touchX);
-    Serial.print(" | Y = ");
-    Serial.print(touchY);
-    Serial.print(" | Pressure = ");
-    Serial.print(touchZ);
-    Serial.println();
-}
-
-// Print Touchscreen info about X, Y and Pressure (Z) on the TFT Display
-void printTouchToDisplay(int touchX, int touchY, int touchZ)
-{
-    // Clear TFT screen
-    tft.fillScreen(TFT_BLACK);
-    tft.setTextColor(TFT_WHITE, TFT_BLACK);
-
-    int centerX = SCREEN_WIDTH / 2;
-    int textY = 80;
-
-    String tempText = "X = " + String(touchX);
-    tft.drawCentreString(tempText, centerX, textY, FONT_SIZE);
-
-    textY += 20;
-    tempText = "Y = " + String(touchY);
-    tft.drawCentreString(tempText, centerX, textY, FONT_SIZE);
-
-    textY += 20;
-    tempText = "Pressure = " + String(touchZ);
-    tft.drawCentreString(tempText, centerX, textY, FONT_SIZE);
-}
+// Current time
+unsigned long currentTime = millis();
+// Previous time
+unsigned long previousTime = 0;
+// Define timeout time in milliseconds (example: 2000ms = 2s)
+const long timeoutTime = 2000;
 
 void setup()
 {
     Serial.begin(115200);
+    // Initialize the output variables as outputs
+    pinMode(output26, OUTPUT);
+    pinMode(output27, OUTPUT);
+    // Set outputs to LOW
+    digitalWrite(output26, LOW);
+    digitalWrite(output27, LOW);
 
-    // Start the SPI for the touchscreen and init the touchscreen
-    touchscreenSPI.begin(XPT2046_CLK, XPT2046_MISO, XPT2046_MOSI, XPT2046_CS);
-    touchscreen.begin(touchscreenSPI);
-    // Set the Touchscreen rotation in landscape mode
-    // Note: in some displays, the touchscreen might be upside down, so you might need to set the rotation to 3: touchscreen.setRotation(3);
-    touchscreen.setRotation(1);
-
-    // Start the tft display
-    tft.init();
-    // Set the TFT display rotation in landscape mode
-    tft.setRotation(1);
-
-    // Clear the screen before writing to it
-    tft.fillScreen(TFT_BLACK);
-
-    // Set X and Y coordinates for center of display
-    int centerX = SCREEN_WIDTH / 2;
-    int centerY = SCREEN_HEIGHT / 2;
-
-    tft.drawCentreString("Hello, world!", centerX, 30, FONT_SIZE);
-    tft.drawCentreString("Touch screen to test", centerX, centerY, FONT_SIZE);
+    // Connect to Wi-Fi network with SSID and password
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+    WiFi.begin(ssid, password);
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    // Print local IP address and start web server
+    Serial.println("");
+    Serial.println("WiFi connected.");
+    Serial.println("IP address: ");
+    Serial.println(WiFi.localIP());
+    server.begin();
 }
 
 void loop()
 {
-    // Checks if Touchscreen was touched, and prints X, Y and Pressure (Z) info on the TFT display and Serial Monitor
-    if (touchscreen.tirqTouched() && touchscreen.touched()) {
-        // Get Touchscreen points
-        TS_Point p = touchscreen.getPoint();
-        // Calibrate Touchscreen points with map function to the correct width and height
-        x = map(p.x, 200, 3700, 1, SCREEN_WIDTH);
-        y = map(p.y, 240, 3800, 1, SCREEN_HEIGHT);
-        z = p.z;
+    WiFiClient client = server.available(); // Listen for incoming clients
 
-        printTouchToSerial(x, y, z);
-        printTouchToDisplay(x, y, z);
+    if (client) { // If a new client connects,
+        currentTime = millis();
+        previousTime = currentTime;
+        Serial.println("New Client."); // print a message out in the serial port
+        String currentLine = ""; // make a String to hold incoming data from the client
+        while (client.connected() && currentTime - previousTime <= timeoutTime) { // loop while the client's connected
+            currentTime = millis();
+            if (client.available()) { // if there's bytes to read from the client,
+                char c = client.read(); // read a byte, then
+                Serial.write(c); // print it out the serial monitor
+                header += c;
+                if (c == '\n') { // if the byte is a newline character
+                    // if the current line is blank, you got two newline characters in a row.
+                    // that's the end of the client HTTP request, so send a response:
+                    if (currentLine.length() == 0) {
+                        // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+                        // and a content-type so the client knows what's coming, then a blank line:
+                        client.println("HTTP/1.1 200 OK");
+                        client.println("Content-type:text/html");
+                        client.println("Connection: close");
+                        client.println();
 
-        delay(100);
+                        // turns the GPIOs on and off
+                        if (header.indexOf("GET /26/on") >= 0) {
+                            Serial.println("GPIO 26 on");
+                            output26State = "on";
+                            digitalWrite(output26, HIGH);
+                        } else if (header.indexOf("GET /26/off") >= 0) {
+                            Serial.println("GPIO 26 off");
+                            output26State = "off";
+                            digitalWrite(output26, LOW);
+                        } else if (header.indexOf("GET /27/on") >= 0) {
+                            Serial.println("GPIO 27 on");
+                            output27State = "on";
+                            digitalWrite(output27, HIGH);
+                        } else if (header.indexOf("GET /27/off") >= 0) {
+                            Serial.println("GPIO 27 off");
+                            output27State = "off";
+                            digitalWrite(output27, LOW);
+                        }
+
+                        // Display the HTML web page
+                        client.println("<!DOCTYPE html><html>");
+                        client.println("<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
+                        client.println("<link rel=\"icon\" href=\"data:,\">");
+                        // CSS to style the on/off buttons
+                        // Feel free to change the background-color and font-size attributes to fit your preferences
+                        client.println("<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}");
+                        client.println(".button { background-color: #4CAF50; border: none; color: white; padding: 16px 40px;");
+                        client.println("text-decoration: none; font-size: 30px; margin: 2px; cursor: pointer;}");
+                        client.println(".button2 {background-color: #555555;}</style></head>");
+
+                        // Web Page Heading
+                        client.println("<body><h1>ESP32 Web Server</h1>");
+
+                        // Display current state, and ON/OFF buttons for GPIO 26
+                        client.println("<p>GPIO 26 - State " + output26State + "</p>");
+                        // If the output26State is off, it displays the ON button
+                        if (output26State == "off") {
+                            client.println("<p><a href=\"/26/on\"><button class=\"button\">ON</button></a></p>");
+                        } else {
+                            client.println("<p><a href=\"/26/off\"><button class=\"button button2\">OFF</button></a></p>");
+                        }
+
+                        // Display current state, and ON/OFF buttons for GPIO 27
+                        client.println("<p>GPIO 27 - State " + output27State + "</p>");
+                        // If the output27State is off, it displays the ON button
+                        if (output27State == "off") {
+                            client.println("<p><a href=\"/27/on\"><button class=\"button\">ON</button></a></p>");
+                        } else {
+                            client.println("<p><a href=\"/27/off\"><button class=\"button button2\">OFF</button></a></p>");
+                        }
+                        client.println("</body></html>");
+
+                        // The HTTP response ends with another blank line
+                        client.println();
+                        // Break out of the while loop
+                        break;
+                    } else { // if you got a newline, then clear currentLine
+                        currentLine = "";
+                    }
+                } else if (c != '\r') { // if you got anything else but a carriage return character,
+                    currentLine += c; // add it to the end of the currentLine
+                }
+            }
+        }
+        // Clear the header variable
+        header = "";
+        // Close the connection
+        client.stop();
+        Serial.println("Client disconnected.");
+        Serial.println("");
     }
 }
