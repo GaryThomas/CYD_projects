@@ -88,7 +88,7 @@ int weather_code;
 String weather_description;
 
 // SET VARIABLE TO 0 FOR TEMPERATURE IN FAHRENHEIT DEGREES
-#define TEMP_CELSIUS 1
+#define TEMP_CELSIUS 0
 
 #if TEMP_CELSIUS
 String temperature_unit = "";
@@ -367,6 +367,18 @@ static void slider_event_callback(lv_event_t *e) {
     LV_LOG_USER("Slider changed to %d%%", (int)lv_slider_get_value(slider));
 }
 
+static void timer_cb(lv_timer_t *timer) {
+    LV_UNUSED(timer);
+    get_weather_data();
+    get_weather_description(weather_code);
+    lv_label_set_text(text_label_date, current_date.c_str());
+    lv_label_set_text(text_label_temperature, String("      " + temperature + degree_symbol).c_str());
+    lv_label_set_text(text_label_humidity, String("   " + humidity + "%").c_str());
+    lv_label_set_text(text_label_weather_description, weather_description.c_str());
+    lv_label_set_text(text_label_time_location,
+                      String("Last Update: " + last_weather_update + "  |  " + location).c_str());
+}
+
 void lv_create_main_gui(void) {
     LV_IMAGE_DECLARE(image_weather_sun);
     LV_IMAGE_DECLARE(image_weather_cloud);
@@ -421,8 +433,8 @@ void lv_create_main_gui(void) {
     lv_obj_set_style_text_font((lv_obj_t *)text_label_time_location, &lv_font_montserrat_12, 0);
     lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_palette_main(LV_PALETTE_GREY), 0);
 
-    // lv_timer_t *timer = lv_timer_create(timer_cb, 600000, NULL);
-    // lv_timer_ready(timer);
+    lv_timer_t *timer = lv_timer_create(timer_cb, 600000, NULL);
+    lv_timer_ready(timer);
 }
 
 void setup() {
@@ -468,9 +480,6 @@ void setup() {
 
     // Function to draw the GUI (text, buttons and sliders)
     lv_create_main_gui();
-
-    // Testing the weather data fetching function
-    get_weather_data();
 }
 
 void loop() {
