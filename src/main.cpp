@@ -435,7 +435,7 @@ void lv_create_main_gui(void) {
     lv_obj_set_style_text_font((lv_obj_t *)text_label_time_location, &lv_font_montserrat_12, 0);
     lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_palette_main(LV_PALETTE_GREY), 0);
 
-    lv_timer_t *timer = lv_timer_create(timer_cb, 60000, NULL);
+    lv_timer_t *timer = lv_timer_create(timer_cb, 600000, NULL);
     lv_timer_set_repeat_count(timer, -1);
     lv_timer_ready(timer);
 }
