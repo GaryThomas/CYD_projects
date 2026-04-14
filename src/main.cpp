@@ -77,6 +77,8 @@ static lv_obj_t *text_label_time_location;
 String latitude = "40.5853";    // Fort Collins latitude
 String longitude = "-105.0844"; // Fort Collins longitude
 String timezone = "America%2FDenver";
+String location = "Fort Collins, CO";
+
 String temperature;
 String humidity;
 String current_date;
@@ -366,47 +368,61 @@ static void slider_event_callback(lv_event_t *e) {
 }
 
 void lv_create_main_gui(void) {
-    // Create a text label aligned center on top ("Hello, world!")
-    lv_obj_t *text_label = lv_label_create(lv_screen_active());
-    lv_label_set_long_mode(text_label, LV_LABEL_LONG_WRAP); // Breaks the long lines
-    lv_label_set_text(text_label, "Hello, world!");
-    lv_obj_set_width(text_label, 150); // Set smaller width to make the lines wrap
-    lv_obj_set_style_text_align(text_label, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_align(text_label, LV_ALIGN_CENTER, 0, -90);
+    LV_IMAGE_DECLARE(image_weather_sun);
+    LV_IMAGE_DECLARE(image_weather_cloud);
+    LV_IMAGE_DECLARE(image_weather_rain);
+    LV_IMAGE_DECLARE(image_weather_thunder);
+    LV_IMAGE_DECLARE(image_weather_snow);
+    LV_IMAGE_DECLARE(image_weather_night);
+    LV_IMAGE_DECLARE(image_weather_temperature);
+    LV_IMAGE_DECLARE(image_weather_humidity);
 
-    lv_obj_t *btn_label;
-    // Create a Button (btn1)
-    lv_obj_t *btn1 = lv_button_create(lv_screen_active());
-    lv_obj_add_event_cb(btn1, event_handler_btn1, LV_EVENT_ALL, NULL);
-    lv_obj_align(btn1, LV_ALIGN_CENTER, 0, -50);
-    lv_obj_remove_flag(btn1, LV_OBJ_FLAG_PRESS_LOCK);
+    // Get the weather data from open-meteo.com API
+    get_weather_data();
+    void get_weather_description(int);
 
-    btn_label = lv_label_create(btn1);
-    lv_label_set_text(btn_label, "Button");
-    lv_obj_center(btn_label);
+    weather_image = lv_image_create(lv_screen_active());
+    lv_obj_align(weather_image, LV_ALIGN_CENTER, -80, -20);
 
-    // Create a Toggle button (btn2)
-    lv_obj_t *btn2 = lv_button_create(lv_screen_active());
-    lv_obj_add_event_cb(btn2, event_handler_btn2, LV_EVENT_ALL, NULL);
-    lv_obj_align(btn2, LV_ALIGN_CENTER, 0, 10);
-    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_set_height(btn2, LV_SIZE_CONTENT);
+    get_weather_description(weather_code);
 
-    btn_label = lv_label_create(btn2);
-    lv_label_set_text(btn_label, "Toggle");
-    lv_obj_center(btn_label);
+    text_label_date = lv_label_create(lv_screen_active());
+    lv_label_set_text(text_label_date, current_date.c_str());
+    lv_obj_align(text_label_date, LV_ALIGN_CENTER, 70, -70);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_date, &lv_font_montserrat_26, 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_date, lv_palette_main(LV_PALETTE_TEAL), 0);
 
-    // Create a slider aligned in the center bottom of the TFT display
-    lv_obj_t *slider = lv_slider_create(lv_screen_active());
-    lv_obj_align(slider, LV_ALIGN_CENTER, 0, 60);
-    lv_obj_add_event_cb(slider, slider_event_callback, LV_EVENT_VALUE_CHANGED, NULL);
-    lv_slider_set_range(slider, 0, 100);
-    lv_obj_set_style_anim_duration(slider, 2000, 0);
+    lv_obj_t *weather_image_temperature = lv_image_create(lv_screen_active());
+    lv_image_set_src(weather_image_temperature, &image_weather_temperature);
+    lv_obj_align(weather_image_temperature, LV_ALIGN_CENTER, 30, -25);
+    text_label_temperature = lv_label_create(lv_screen_active());
+    lv_label_set_text(text_label_temperature, String("      " + temperature + degree_symbol).c_str());
+    lv_obj_align(text_label_temperature, LV_ALIGN_CENTER, 70, -25);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_temperature, &lv_font_montserrat_22, 0);
 
-    // Create a label below the slider to display the current slider value
-    slider_label = lv_label_create(lv_screen_active());
-    lv_label_set_text(slider_label, "0%");
-    lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+    lv_obj_t *weather_image_humidity = lv_image_create(lv_screen_active());
+    lv_image_set_src(weather_image_humidity, &image_weather_humidity);
+    lv_obj_align(weather_image_humidity, LV_ALIGN_CENTER, 30, 20);
+    text_label_humidity = lv_label_create(lv_screen_active());
+    lv_label_set_text(text_label_humidity, String("   " + humidity + "%").c_str());
+    lv_obj_align(text_label_humidity, LV_ALIGN_CENTER, 70, 20);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_humidity, &lv_font_montserrat_22, 0);
+
+    text_label_weather_description = lv_label_create(lv_screen_active());
+    lv_label_set_text(text_label_weather_description, weather_description.c_str());
+    lv_obj_align(text_label_weather_description, LV_ALIGN_BOTTOM_MID, 0, -40);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_weather_description, &lv_font_montserrat_18, 0);
+
+    // Create a text label for the time and timezone aligned center in the bottom of the screen
+    text_label_time_location = lv_label_create(lv_screen_active());
+    lv_label_set_text(text_label_time_location,
+                      String("Last Update: " + last_weather_update + "  |  " + location).c_str());
+    lv_obj_align(text_label_time_location, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_time_location, &lv_font_montserrat_12, 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_palette_main(LV_PALETTE_GREY), 0);
+
+    // lv_timer_t *timer = lv_timer_create(timer_cb, 600000, NULL);
+    // lv_timer_ready(timer);
 }
 
 void setup() {
