@@ -66,6 +66,81 @@ int x, y, z;
 #define DRAW_BUF_SIZE (SCREEN_WIDTH * SCREEN_HEIGHT / 10 * (LV_COLOR_DEPTH / 8))
 uint32_t draw_buf[DRAW_BUF_SIZE / 4];
 
+// Weather data variables
+static lv_obj_t *weather_image;
+static lv_obj_t *text_label_date;
+static lv_obj_t *text_label_temperature;
+static lv_obj_t *text_label_humidity;
+static lv_obj_t *text_label_weather_description;
+static lv_obj_t *text_label_time_location;
+String latitude = "40.5853";    // Fort Collins latitude
+String longitude = "-105.0844"; // Fort Collins longitude
+String temperature_unit = "&temperature_unit=fahrenheit";
+String timezone = "America%2FDenver";
+String temperature;
+String humidity;
+String current_date;
+String last_weather_update;
+int is_day;
+int weather_code;
+
+// Fetch weather data from OpenWeatherMap API
+void get_weather_data() {
+    if (WiFi.status() == WL_CONNECTED) {
+        HTTPClient http;
+        // Construct the API endpoint
+        String url = String("http://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude +
+                            "&current=temperature_2m,relative_humidity_2m,is_day,precipitation,rain,weather_code" +
+                            temperature_unit + "&timezone=" + timezone + "&forecast_days=1");
+        http.begin(url);
+        int httpCode = http.GET(); // Make the GET request
+
+        if (httpCode > 0) {
+            // Check for the response
+            if (httpCode == HTTP_CODE_OK) {
+                String payload = http.getString();
+                Serial.println("Request information:");
+                Serial.println(payload);
+                //  Parse the JSON to extract the time
+                JsonDocument doc;
+                DeserializationError error = deserializeJson(doc, payload);
+                if (!error) {
+                    const char *datetime = doc["current"]["time"];
+                    Serial.println(datetime);
+                    const float _temperature = doc["current"]["temperature_2m"];
+                    temperature = String(_temperature);
+                    Serial.println(temperature);
+                    const int _humidity = doc["current"]["relative_humidity_2m"];
+                    humidity = String(_humidity);
+                    Serial.println(humidity);
+                    const int _is_day = doc["current"]["is_day"];
+                    is_day = _is_day;
+                    Serial.println(is_day);
+                    const int _weather_code = doc["current"]["weather_code"];
+                    weather_code = _weather_code;
+                    Serial.println(weather_code);
+                    // Split the datetime into date and time
+                    String datetime_str = String(datetime);
+                    int splitIndex = datetime_str.indexOf('T');
+                    current_date = datetime_str.substring(0, splitIndex);
+                    last_weather_update =
+                        datetime_str.substring(splitIndex + 1, splitIndex + 9); // Extract time portion
+                } else {
+                    Serial.print("deserializeJson() failed: ");
+                    Serial.println(error.c_str());
+                }
+            } else {
+                Serial.printf("GET request failed, error: %s\n", http.errorToString(httpCode).c_str());
+            }
+        } else {
+            Serial.printf("GET request failed, error: %s\n", http.errorToString(httpCode).c_str());
+        }
+        http.end(); // Close connection
+    } else {
+        Serial.println("Not connected to Wi-Fi");
+    }
+}
+
 // If logging is enabled, it will inform the user about what is happening in the library
 void log_print(lv_log_level_t level, const char *buf) {
     LV_UNUSED(level);
@@ -221,6 +296,9 @@ void setup() {
 
     // Function to draw the GUI (text, buttons and sliders)
     lv_create_main_gui();
+
+    // Testing the weather data fetching function
+    get_weather_data();
 }
 
 void loop() {
