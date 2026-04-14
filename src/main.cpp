@@ -39,6 +39,7 @@
 
 #include <XPT2046_Touchscreen.h>
 
+#include "weather_images.h"
 #include <ArduinoJson.h>
 #include <HTTPClient.h>
 #include <WiFi.h>
@@ -75,7 +76,6 @@ static lv_obj_t *text_label_weather_description;
 static lv_obj_t *text_label_time_location;
 String latitude = "40.5853";    // Fort Collins latitude
 String longitude = "-105.0844"; // Fort Collins longitude
-String temperature_unit = "&temperature_unit=fahrenheit";
 String timezone = "America%2FDenver";
 String temperature;
 String humidity;
@@ -83,6 +83,18 @@ String current_date;
 String last_weather_update;
 int is_day;
 int weather_code;
+String weather_description;
+
+// SET VARIABLE TO 0 FOR TEMPERATURE IN FAHRENHEIT DEGREES
+#define TEMP_CELSIUS 1
+
+#if TEMP_CELSIUS
+String temperature_unit = "";
+const char degree_symbol[] = "\u00B0C";
+#else
+String temperature_unit = "&temperature_unit=fahrenheit";
+const char degree_symbol[] = "\u00B0F";
+#endif
 
 // Fetch weather data from OpenWeatherMap API
 void get_weather_data() {
@@ -138,6 +150,150 @@ void get_weather_data() {
         http.end(); // Close connection
     } else {
         Serial.println("Not connected to Wi-Fi");
+    }
+}
+
+/*
+  WMO Weather interpretation codes (WW)- Code	Description
+  0	Clear sky
+  1, 2, 3	Mainly clear, partly cloudy, and overcast
+  45, 48	Fog and depositing rime fog
+  51, 53, 55	Drizzle: Light, moderate, and dense intensity
+  56, 57	Freezing Drizzle: Light and dense intensity
+  61, 63, 65	Rain: Slight, moderate and heavy intensity
+  66, 67	Freezing Rain: Light and heavy intensity
+  71, 73, 75	Snow fall: Slight, moderate, and heavy intensity
+  77	Snow grains
+  80, 81, 82	Rain showers: Slight, moderate, and violent
+  85, 86	Snow showers slight and heavy
+  95 *	Thunderstorm: Slight or moderate
+  96, 99 *	Thunderstorm with slight and heavy hail
+*/
+void get_weather_description(int code) {
+    switch (code) {
+    case 0:
+        if (is_day == 1) {
+            lv_image_set_src(weather_image, &image_weather_sun);
+        } else {
+            lv_image_set_src(weather_image, &image_weather_night);
+        }
+        weather_description = "CLEAR SKY";
+        break;
+    case 1:
+        if (is_day == 1) {
+            lv_image_set_src(weather_image, &image_weather_sun);
+        } else {
+            lv_image_set_src(weather_image, &image_weather_night);
+        }
+        weather_description = "MAINLY CLEAR";
+        break;
+    case 2:
+        lv_image_set_src(weather_image, &image_weather_cloud);
+        weather_description = "PARTLY CLOUDY";
+        break;
+    case 3:
+        lv_image_set_src(weather_image, &image_weather_cloud);
+        weather_description = "OVERCAST";
+        break;
+    case 45:
+        lv_image_set_src(weather_image, &image_weather_cloud);
+        weather_description = "FOG";
+        break;
+    case 48:
+        lv_image_set_src(weather_image, &image_weather_cloud);
+        weather_description = "DEPOSITING RIME FOG";
+        break;
+    case 51:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "DRIZZLE LIGHT INTENSITY";
+        break;
+    case 53:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "DRIZZLE MODERATE INTENSITY";
+        break;
+    case 55:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "DRIZZLE DENSE INTENSITY";
+        break;
+    case 56:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "FREEZING DRIZZLE LIGHT";
+        break;
+    case 57:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "FREEZING DRIZZLE DENSE";
+        break;
+    case 61:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN SLIGHT INTENSITY";
+        break;
+    case 63:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN MODERATE INTENSITY";
+        break;
+    case 65:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN HEAVY INTENSITY";
+        break;
+    case 66:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "FREEZING RAIN LIGHT INTENSITY";
+        break;
+    case 67:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "FREEZING RAIN HEAVY INTENSITY";
+        break;
+    case 71:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW FALL SLIGHT INTENSITY";
+        break;
+    case 73:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW FALL MODERATE INTENSITY";
+        break;
+    case 75:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW FALL HEAVY INTENSITY";
+        break;
+    case 77:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW GRAINS";
+        break;
+    case 80:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN SHOWERS SLIGHT";
+        break;
+    case 81:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN SHOWERS MODERATE";
+        break;
+    case 82:
+        lv_image_set_src(weather_image, &image_weather_rain);
+        weather_description = "RAIN SHOWERS VIOLENT";
+        break;
+    case 85:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW SHOWERS SLIGHT";
+        break;
+    case 86:
+        lv_image_set_src(weather_image, &image_weather_snow);
+        weather_description = "SNOW SHOWERS HEAVY";
+        break;
+    case 95:
+        lv_image_set_src(weather_image, &image_weather_thunder);
+        weather_description = "THUNDERSTORM";
+        break;
+    case 96:
+        lv_image_set_src(weather_image, &image_weather_thunder);
+        weather_description = "THUNDERSTORM SLIGHT HAIL";
+        break;
+    case 99:
+        lv_image_set_src(weather_image, &image_weather_thunder);
+        weather_description = "THUNDERSTORM HEAVY HAIL";
+        break;
+    default:
+        weather_description = "UNKNOWN WEATHER CODE";
+        break;
     }
 }
 
