@@ -120,19 +120,20 @@ void get_weather_data() {
                 DeserializationError error = deserializeJson(doc, payload);
                 if (!error) {
                     const char *datetime = doc["current"]["time"];
-                    Serial.println(datetime);
                     const float _temperature = doc["current"]["temperature_2m"];
                     temperature = String(_temperature);
-                    Serial.println(temperature);
                     const int _humidity = doc["current"]["relative_humidity_2m"];
                     humidity = String(_humidity);
-                    Serial.println(humidity);
                     const int _is_day = doc["current"]["is_day"];
                     is_day = _is_day;
-                    Serial.println(is_day);
                     const int _weather_code = doc["current"]["weather_code"];
                     weather_code = _weather_code;
-                    Serial.println(weather_code);
+                    // Serial.println(weather_code);
+                    // Serial.println(datetime);
+                    // Serial.println(temperature);
+                    // Serial.println(humidity);
+                    // Serial.println(is_day);
+
                     // Split the datetime into date and time
                     String datetime_str = String(datetime);
                     int splitIndex = datetime_str.indexOf('T');
@@ -369,6 +370,7 @@ static void slider_event_callback(lv_event_t *e) {
 
 static void timer_cb(lv_timer_t *timer) {
     LV_UNUSED(timer);
+    Serial.println("Timer callback triggered, fetching weather data...");
     get_weather_data();
     get_weather_description(weather_code);
     lv_label_set_text(text_label_date, current_date.c_str());
@@ -391,7 +393,7 @@ void lv_create_main_gui(void) {
 
     // Get the weather data from open-meteo.com API
     get_weather_data();
-    void get_weather_description(int);
+    // void get_weather_description(int);
 
     weather_image = lv_image_create(lv_screen_active());
     lv_obj_align(weather_image, LV_ALIGN_CENTER, -80, -20);
@@ -402,7 +404,7 @@ void lv_create_main_gui(void) {
     lv_label_set_text(text_label_date, current_date.c_str());
     lv_obj_align(text_label_date, LV_ALIGN_CENTER, 70, -70);
     lv_obj_set_style_text_font((lv_obj_t *)text_label_date, &lv_font_montserrat_26, 0);
-    lv_obj_set_style_text_color((lv_obj_t *)text_label_date, lv_palette_main(LV_PALETTE_TEAL), 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_date, lv_palette_main(LV_PALETTE_BROWN), 0);
 
     lv_obj_t *weather_image_temperature = lv_image_create(lv_screen_active());
     lv_image_set_src(weather_image_temperature, &image_weather_temperature);
@@ -410,7 +412,8 @@ void lv_create_main_gui(void) {
     text_label_temperature = lv_label_create(lv_screen_active());
     lv_label_set_text(text_label_temperature, String("      " + temperature + degree_symbol).c_str());
     lv_obj_align(text_label_temperature, LV_ALIGN_CENTER, 70, -25);
-    lv_obj_set_style_text_font((lv_obj_t *)text_label_temperature, &lv_font_montserrat_22, 0);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_temperature, &lv_font_montserrat_24, 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_temperature, lv_color_white(), 0);
 
     lv_obj_t *weather_image_humidity = lv_image_create(lv_screen_active());
     lv_image_set_src(weather_image_humidity, &image_weather_humidity);
@@ -418,12 +421,14 @@ void lv_create_main_gui(void) {
     text_label_humidity = lv_label_create(lv_screen_active());
     lv_label_set_text(text_label_humidity, String("   " + humidity + "%").c_str());
     lv_obj_align(text_label_humidity, LV_ALIGN_CENTER, 70, 20);
-    lv_obj_set_style_text_font((lv_obj_t *)text_label_humidity, &lv_font_montserrat_22, 0);
+    lv_obj_set_style_text_font((lv_obj_t *)text_label_humidity, &lv_font_montserrat_24, 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_humidity, lv_color_white(), 0);
 
     text_label_weather_description = lv_label_create(lv_screen_active());
     lv_label_set_text(text_label_weather_description, weather_description.c_str());
     lv_obj_align(text_label_weather_description, LV_ALIGN_BOTTOM_MID, 0, -40);
     lv_obj_set_style_text_font((lv_obj_t *)text_label_weather_description, &lv_font_montserrat_18, 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_weather_description, lv_color_white(), 0);
 
     // Create a text label for the time and timezone aligned center in the bottom of the screen
     text_label_time_location = lv_label_create(lv_screen_active());
@@ -431,9 +436,11 @@ void lv_create_main_gui(void) {
                       String("Last Update: " + last_weather_update + "  |  " + location).c_str());
     lv_obj_align(text_label_time_location, LV_ALIGN_BOTTOM_MID, 0, -10);
     lv_obj_set_style_text_font((lv_obj_t *)text_label_time_location, &lv_font_montserrat_12, 0);
-    lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_palette_main(LV_PALETTE_GREY), 0);
+    // lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_palette_main(LV_PALETTE_GREY), 0);
+    lv_obj_set_style_text_color((lv_obj_t *)text_label_time_location, lv_color_white(), 0);
 
-    lv_timer_t *timer = lv_timer_create(timer_cb, 600000, NULL);
+    lv_timer_t *timer = lv_timer_create(timer_cb, 60000, NULL);
+    lv_timer_set_repeat_count(timer, -1);
     lv_timer_ready(timer);
 }
 
