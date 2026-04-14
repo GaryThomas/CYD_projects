@@ -3,6 +3,7 @@
 /*
   Adapted from the LVGL Arduino example available at
   https : // randomnerdtutorials.com/lvgl-cheap-yellow-display-esp32-2432s028r/
+  https://randomnerdtutorials.com/esp32-cyd-lvgl-weather-station/
 */
 
 /*  Rui Santos & Sara Santos - Random Nerd Tutorials
@@ -35,7 +36,16 @@
 
 // Install the "XPT2046_Touchscreen" library by Paul Stoffregen to use the Touchscreen -
 // https://github.com/PaulStoffregen/XPT2046_Touchscreen - Note: this library doesn't require further configuration
+
 #include <XPT2046_Touchscreen.h>
+
+#include <ArduinoJson.h>
+#include <HTTPClient.h>
+#include <WiFi.h>
+
+// Replace with your network credentials
+const char *ssid = "Chez Thomas";
+const char *password = "2625426254";
 
 // Touchscreen pins
 #define XPT2046_IRQ 36  // T_IRQ
@@ -173,6 +183,16 @@ void setup() {
         String("LVGL Library Version: ") + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
     Serial.begin(115200);
     Serial.println(LVGL_Arduino);
+
+    // Connect to Wi-Fi
+    WiFi.begin(ssid, password);
+    Serial.print("Connecting");
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.print("\nConnected to Wi-Fi network with IP Address: ");
+    Serial.println(WiFi.localIP());
 
     // Start LVGL
     lv_init();
