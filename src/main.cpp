@@ -4,6 +4,9 @@
   Adapted from the LVGL Arduino example available at
   https : // randomnerdtutorials.com/lvgl-cheap-yellow-display-esp32-2432s028r/
   https://randomnerdtutorials.com/esp32-cyd-lvgl-weather-station/
+  Extended using:
+    https://medium.com/@androidcrypto/create-an-internet-weather-station-with-3-days-forecast-on-an-esp32-cheap-yellow-display-cyd-15eb5c353b1d
+    https://github.com/vasi2024/ESP32_CYD_Weather_Station_With_Forecast-main.git
 */
 
 /*  Rui Santos & Sara Santos - Random Nerd Tutorials
@@ -41,12 +44,26 @@
 
 #include "weather_images.h"
 #include <ArduinoJson.h>
+#include <FS.h>
 #include <HTTPClient.h>
+#include <LittleFS.h>
 #include <WiFi.h>
+
+// Imported fonts (from Google Noto family)
+// for better display of weather information, these are stored in the LittleFS filesystem
+#define AA_FONT_SMALL "fonts/NSBold15" // 15 point Noto sans serif bold
+#define AA_FONT_LARGE "fonts/NSBold36" // 36 point Noto sans serif bold
 
 // Replace with your network credentials
 const char *ssid = "Chez Thomas";
 const char *password = "2625426254";
+// Localization settings
+String latitude = "40.5853";    // Fort Collins latitude
+String longitude = "-105.0844"; // Fort Collins longitude
+String timezone = "America%2FDenver";
+String location = "Fort Collins, CO";
+// OpenWeatherMap.org API key (replace with your own API key)
+String api_key = "a1c3465d70f1aac3095135e01d9cd6d5";
 
 // Touchscreen pins
 #define XPT2046_IRQ 36  // T_IRQ
@@ -74,10 +91,6 @@ static lv_obj_t *text_label_temperature;
 static lv_obj_t *text_label_humidity;
 static lv_obj_t *text_label_weather_description;
 static lv_obj_t *text_label_time_location;
-String latitude = "40.5853";    // Fort Collins latitude
-String longitude = "-105.0844"; // Fort Collins longitude
-String timezone = "America%2FDenver";
-String location = "Fort Collins, CO";
 
 String temperature;
 String humidity;
@@ -440,6 +453,37 @@ void lv_create_main_gui(void) {
     lv_timer_ready(timer);
 }
 
+void listDir(fs::FS &fs, const char *dirname, uint8_t levels) {
+    Serial.printf("Listing directory: %s\r\n", dirname);
+
+    File root = fs.open(dirname);
+    if (!root) {
+        Serial.println("- failed to open directory");
+        return;
+    }
+    if (!root.isDirectory()) {
+        Serial.println(" - not a directory");
+        return;
+    }
+
+    File file = root.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            Serial.print("  DIR : ");
+            Serial.println(file.name());
+            if (levels) {
+                listDir(fs, file.path(), levels - 1);
+            }
+        } else {
+            Serial.print("  FILE: ");
+            Serial.print(file.name());
+            Serial.print("\tSIZE: ");
+            Serial.println(file.size());
+        }
+        file = root.openNextFile();
+    }
+}
+
 void setup() {
     String LVGL_Arduino =
         String("LVGL Library Version: ") + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
@@ -455,6 +499,21 @@ void setup() {
     }
     Serial.print("\nConnected to Wi-Fi network with IP Address: ");
     Serial.println(WiFi.localIP());
+
+    // Set up PWM for the backlight
+    // NEW Version for ESP32 Core 3.x
+    pinMode(TFT_BL, OUTPUT);
+    analogWrite(TFT_BL, 50); // Set to 50% brightness (0-255)
+
+    if (!LittleFS.begin()) {
+        Serial.println("Flash FS initialization failed!");
+        while (1)
+            yield(); // Stay here twiddling thumbs waiting
+    }
+    Serial.println("\nFlash FS available!");
+    listDir(LittleFS, "/", 3); // List the directories up to three levels beginning at the root directory
+    while (1)
+        yield(); // Stay here twiddling thumbs waiting
 
     // Start LVGL
     lv_init();
