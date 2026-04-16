@@ -391,6 +391,12 @@ void processSDCard() {
                                 latitude = latitude.substring(1, latitude.length() - 1);
                             }
                             Serial.printf("Loaded Latitude: %s\n", latitude.c_str());
+                        } else if (line.startsWith("units=")) {
+                            units = line.substring(strlen("units="));
+                            if (units.startsWith("\"") && units.endsWith("\"")) {
+                                units = units.substring(1, units.length() - 1);
+                            }
+                            Serial.printf("Loaded Units: %s\n", units.c_str());
                         } else if (line.startsWith("timezone=")) {
                             String myTZ = line.substring(strlen("timezone="));
                             if (myTZ.startsWith("\"") && myTZ.endsWith("\"")) {

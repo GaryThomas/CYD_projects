@@ -38,7 +38,7 @@ const int UPDATE_INTERVAL_SECS = 15UL * 60UL; // 15 minutes
 // Pins for the TFT interface are defined in the User_Config.h file inside the TFT_eSPI library
 
 // For units use "metric" or "imperial"
-const String units = "imperial"; // imperial = Fahrenheit, mph, inches Hg, metric = Celsius, m/s, hPa
+String units = "imperial"; // imperial = Fahrenheit, mph, inches Hg, metric = Celsius, m/s, hPa
 
 // Sign up for a key and read API configuration info here:
 // https://openweathermap.org/, change x's to your API key
