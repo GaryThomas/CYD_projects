@@ -368,6 +368,48 @@ void setup() {
             Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
             listDir(SD, "/", 2);
+
+            // Update settings, if available, from SD card
+            if (SD.exists("/Settings.txt")) {
+                Serial.println("Found settings.txt on SD card, loading settings from there...");
+                File settingsFile = SD.open("/Settings.txt");
+                if (settingsFile) {
+                    while (settingsFile.available()) {
+                        String line = settingsFile.readStringUntil('\n');
+                        line.trim();
+                        if (line.startsWith("WIFI_SSID=")) {
+                            wifiSSID = line.substring(strlen("WIFI_SSID="));
+                            if (wifiSSID.startsWith("\"") && wifiSSID.endsWith("\"")) {
+                                wifiSSID = wifiSSID.substring(1, wifiSSID.length() - 1);
+                            }
+                            Serial.printf("Loaded WiFi SSID: %s\n", wifiSSID.c_str());
+                        } else if (line.startsWith("WIFI_PASSWORD=")) {
+                            wifiPassword = line.substring(strlen("WIFI_PASSWORD="));
+                            if (wifiPassword.startsWith("\"") && wifiPassword.endsWith("\"")) {
+                                wifiPassword = wifiPassword.substring(1, wifiPassword.length() - 1);
+                            }
+                            Serial.printf("Loaded WiFi Password: %s\n", wifiPassword.c_str());
+                        } else if (line.startsWith("longitude=")) {
+                            longitude = line.substring(strlen("longitude="));
+                            if (longitude.startsWith("\"") && longitude.endsWith("\"")) {
+                                longitude = longitude.substring(1, longitude.length() - 1);
+                            }
+                            Serial.printf("Loaded Longitude: %s\n", longitude.c_str());
+                        } else if (line.startsWith("latitude=")) {
+                            latitude = line.substring(strlen("latitude="));
+                            if (latitude.startsWith("\"") && latitude.endsWith("\"")) {
+                                latitude = latitude.substring(1, latitude.length() - 1);
+                            }
+                            Serial.printf("Loaded Latitude: %s\n", latitude.c_str());
+                        }
+                    }
+                    settingsFile.close();
+                } else {
+                    Serial.println("Failed to open /Settings.txt for reading");
+                }
+            } else {
+                Serial.println("No /Settings.txt found on SD card, using default settings");
+            }
         }
     } else {
         Serial.println("Card Mount Failed");
@@ -430,7 +472,8 @@ void setup() {
 
 // Call once for ESP32 and ESP8266
 #if !defined(ARDUINO_ARCH_MBED)
-    WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+    Serial.println("Connecting to WiFi..." + wifiSSID + " with password " + wifiPassword);
+    WiFi.begin(wifiSSID, wifiPassword);
 #endif
 
     while (WiFi.status() != WL_CONNECTED) {

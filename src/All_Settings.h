@@ -20,14 +20,14 @@
 // Settings defined below
 
 // Enable API debug messages
-#define SERIAL_MESSAGES
+// #define SERIAL_MESSAGES
 
 // Forecast includes today (true) or the next 4 days (false)
 #define FORECAST_INCLUDES_TODAY true
 
 // Wi-Fi network name and password:
-#define WIFI_SSID "Chez Thomas"
-#define WIFI_PASSWORD "2625426254"
+String wifiSSID = "Chez Thomas";
+String wifiPassword = "2625426254";
 
 // #define TIMEZONE UK // See NTP_Time.h tab for other "Zone references", UK, usMT etc
 #define TIMEZONE usMT // US Mountain Time Zone (Denver, Colorado)
@@ -48,8 +48,8 @@ const String api_key = "a1c3465d70f1aac3095135e01d9cd6d5";
 
 // Fort Collins, CO
 // 40.5853, -105.0844
-const String latitude = "40.5853";
-const String longitude = "-105.0844";
+String latitude = "40.5853";
+String longitude = "-105.0844";
 
 // For language codes see https://openweathermap.org/current#multi
 const String language = "en"; // Default language = en = English
