@@ -19,6 +19,13 @@
 //////////////////////////////
 // Settings defined below
 
+// Enable API debug messages
+#define SERIAL_MESSAGES
+
+// Forecast includes today (true) or the next 4 days (false)
+#define FORECAST_INCLUDES_TODAY true
+
+// Wi-Fi network name and password:
 #define WIFI_SSID "Chez Thomas"
 #define WIFI_PASSWORD "2625426254"
 

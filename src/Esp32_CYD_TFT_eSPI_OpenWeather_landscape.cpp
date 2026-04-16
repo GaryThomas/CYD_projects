@@ -70,10 +70,11 @@
 #define UI_NAVY 0x000F       // Deep Blue for headers/WiFi
 #define UI_CHARCOAL 0x4228   // Professional Grey for separators
 #define UI_TEMP_BLUE 0x001F  // Pure Blue for temperature
-#define TFT_BL 21            // Backlight pin for most CYD models
-                             // #define SCREEN_SERVER   // For dumping screen shots from TFT
-                             // #define RANDOM_LOCATION // Test only, selects random weather location every refresh
-                             // #define FORMAT_LittleFS   // Wipe LittleFS and all files!
+#define TFT_BL                                                                                                         \
+    21 // Backlight pin for most CYD models
+       // #define SCREEN_SERVER   // For dumping screen shots from TFT
+       // #define RANDOM_LOCATION // Test only, selects random weather location every refresh
+       // #define FORMAT_LittleFS   // Wipe LittleFS and all files!
 
 const char *PROGRAM_VERSION = "ESP32 CYD OpenWeatherMap LittleFS V02.1";
 
@@ -148,6 +149,7 @@ void fillSegment(int x, int y, int start_angle, int sub_angle, int r, unsigned i
 String strDate(time_t unixTime);
 String strTime(time_t unixTime);
 void printWeather(void);
+void drawWifiQuality(int x, int y);
 int leftOffset(String text, String sub);
 int rightOffset(String text, String sub);
 int splitIndex(String text);
@@ -169,7 +171,7 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t *bitmap) 
 **                          Setup
 ***************************************************************************************/
 void setup() {
-    Serial.begin(250000);
+    Serial.begin(115200);
     delay(500);
     Serial.println(PROGRAM_VERSION);
 
@@ -204,9 +206,8 @@ void setup() {
     // Draw splash screen
     if (LittleFS.exists("/splash/OpenWeather.jpg") == true) {
         TJpgDec.drawFsJpg(40, 5, "/splash/OpenWeather.jpg", LittleFS);
+        delay(3000);
     }
-
-    delay(3000);
 
     // Clear bottom section of screen
     tft.fillRect(0, 140, 320, 240 - 140, TFT_BLACK);
@@ -540,8 +541,12 @@ void drawCurrentWeather() {
 void drawForecast() {
     int8_t dayIndex = getNextDayIndex();
 
+#if FORECAST_INCLUDES_TODAY
+    drawForecastDetail(8, 171, 0);
+#else
     drawForecastDetail(8, 171, dayIndex);
     dayIndex += 8;
+#endif
     drawForecastDetail(66, 171, dayIndex); // was 95
     dayIndex += 8;
     drawForecastDetail(124, 171, dayIndex); // was 180
