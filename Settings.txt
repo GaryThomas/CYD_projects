@@ -1,0 +1,9 @@
+#
+# User settings
+#
+WIFI_SSID="Chez Thomas"
+WIFI_PASSWORD="2625426254"
+
+// Location: Fort Collins, CO
+latitude="40.5853"
+longitude="-105.0844"
