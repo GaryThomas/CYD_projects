@@ -1,0 +1,932 @@
+ *  Executing task: platformio device monitor 
+
+
+Please build project in debug configuration to get more details about an exception.
+See https://docs.platformio.org/page/projectconf/build_configurations.html
+
+
+--- Terminal on /dev/ttyUSB1 | 115200 8-N-1
+--- Available filters and text transformations: debug, default, direct, esp32_exception_decoder, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+
+Flash FS available!
+Connecting to WiFi...Chez Thomas with password 2625426254
+..
+
+NTP response time was  : 35 ms
+Time since last sync is: 8.28 s
+Received NTP UTC time  : 14:34:41
+
+
+The connection to server is secure (https). Certificate not checked.
+https://api.openweathermap.org/data/2.5/forecast?lat=40.5853&lon=-105.0844&units=imperial&lang=en&appid=a1c3465d70f1aac3095135e01d9cd6d5
+
+Sending GET request to api.openweathermap.org port 443
+Header end found
+
+Parsing JSON
+
+Done in 958 ms
+
+Data points received
+Weather from OpenWeather
+
+city_name           : Fort Collins
+sunrise             : 06:19
+sunset              : 19:39
+Latitude            : 40.59
+Longitude           : -105.08
+Timezone            : -21600
+
+###############  Forecast weather  ###############
+
+3 hourly forecast    0
+dt (time)        : 09:00
+temp             : 54.36
+temp.min         : 54.36
+temp.max         : 60.31
+pressure         : 1007.00
+sea_level        : 1007.00
+grnd_level       : 833.00
+humidity         : 39
+clouds           : 0
+wind_speed       : 3.20
+wind_deg         : 199
+wind_gust        : 6.78
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-16 15:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast    1
+dt (time)        : 12:00
+temp             : 59.34
+temp.min         : 59.34
+temp.max         : 69.33
+pressure         : 1006.00
+sea_level        : 1006.00
+grnd_level       : 831.00
+humidity         : 32
+clouds           : 29
+wind_speed       : 11.43
+wind_deg         : 173
+wind_gust        : 21.90
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-16 18:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03d
+
+3 hourly forecast    2
+dt (time)        : 15:00
+temp             : 66.56
+temp.min         : 66.56
+temp.max         : 72.66
+pressure         : 1001.00
+sea_level        : 1001.00
+grnd_level       : 828.00
+humidity         : 21
+clouds           : 67
+wind_speed       : 13.87
+wind_deg         : 166
+wind_gust        : 24.18
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-16 21:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04d
+
+3 hourly forecast    3
+dt (time)        : 18:00
+temp             : 71.85
+temp.min         : 71.85
+temp.max         : 71.85
+pressure         : 997.00
+sea_level        : 997.00
+grnd_level       : 827.00
+humidity         : 11
+clouds           : 100
+wind_speed       : 16.58
+wind_deg         : 238
+wind_gust        : 26.37
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-17 00:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04d
+
+3 hourly forecast    4
+dt (time)        : 21:00
+temp             : 65.14
+temp.min         : 65.14
+temp.max         : 65.14
+pressure         : 999.00
+sea_level        : 999.00
+grnd_level       : 827.00
+humidity         : 14
+clouds           : 100
+wind_speed       : 12.66
+wind_deg         : 236
+wind_gust        : 25.72
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-17 03:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04n
+
+3 hourly forecast    5
+dt (time)        : 00:00
+temp             : 60.03
+temp.min         : 60.03
+temp.max         : 60.03
+pressure         : 999.00
+sea_level        : 999.00
+grnd_level       : 827.00
+humidity         : 16
+clouds           : 100
+wind_speed       : 4.65
+wind_deg         : 209
+wind_gust        : 11.72
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-17 06:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04n
+
+3 hourly forecast    6
+dt (time)        : 03:00
+temp             : 48.63
+temp.min         : 48.63
+temp.max         : 48.63
+pressure         : 1002.00
+sea_level        : 1002.00
+grnd_level       : 828.00
+humidity         : 44
+clouds           : 100
+wind_speed       : 8.05
+wind_deg         : 51
+wind_gust        : 14.90
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-17 09:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04n
+
+3 hourly forecast    7
+dt (time)        : 06:00
+temp             : 39.60
+temp.min         : 39.60
+temp.max         : 39.60
+pressure         : 1007.00
+sea_level        : 1007.00
+grnd_level       : 830.00
+humidity         : 52
+clouds           : 88
+wind_speed       : 7.11
+wind_deg         : 43
+wind_gust        : 17.72
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-17 12:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04n
+
+3 hourly forecast    8
+dt (time)        : 09:00
+temp             : 36.36
+temp.min         : 36.36
+temp.max         : 36.36
+pressure         : 1013.00
+sea_level        : 1013.00
+grnd_level       : 833.00
+humidity         : 58
+clouds           : 63
+wind_speed       : 14.99
+wind_deg         : 326
+wind_gust        : 20.33
+visibility       : 5352
+pop              : 0.94
+
+dt_txt           : 2026-04-17 15:00:00
+id               : 600
+main             : Snow
+description      : light snow
+icon             : 13d
+
+3 hourly forecast    9
+dt (time)        : 12:00
+temp             : 41.29
+temp.min         : 41.29
+temp.max         : 41.29
+pressure         : 1012.00
+sea_level        : 1012.00
+grnd_level       : 834.00
+humidity         : 41
+clouds           : 82
+wind_speed       : 8.93
+wind_deg         : 292
+wind_gust        : 12.41
+visibility       : 10000
+pop              : 1.00
+
+dt_txt           : 2026-04-17 18:00:00
+id               : 500
+main             : Rain
+description      : light rain
+icon             : 10d
+
+3 hourly forecast   10
+dt (time)        : 15:00
+temp             : 47.55
+temp.min         : 47.55
+temp.max         : 47.55
+pressure         : 1011.00
+sea_level        : 1011.00
+grnd_level       : 835.00
+humidity         : 15
+clouds           : 96
+wind_speed       : 25.05
+wind_deg         : 289
+wind_gust        : 30.24
+visibility       : 10000
+pop              : 0.69
+
+dt_txt           : 2026-04-17 21:00:00
+id               : 500
+main             : Rain
+description      : light rain
+icon             : 10d
+
+3 hourly forecast   11
+dt (time)        : 18:00
+temp             : 44.96
+temp.min         : 44.96
+temp.max         : 44.96
+pressure         : 1014.00
+sea_level        : 1014.00
+grnd_level       : 837.00
+humidity         : 16
+clouds           : 79
+wind_speed       : 19.04
+wind_deg         : 325
+wind_gust        : 24.49
+visibility       : 10000
+pop              : 0.33
+
+dt_txt           : 2026-04-18 00:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04d
+
+3 hourly forecast   12
+dt (time)        : 21:00
+temp             : 37.54
+temp.min         : 37.54
+temp.max         : 37.54
+pressure         : 1020.00
+sea_level        : 1020.00
+grnd_level       : 839.00
+humidity         : 23
+clouds           : 75
+wind_speed       : 7.65
+wind_deg         : 338
+wind_gust        : 16.22
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 03:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   13
+dt (time)        : 00:00
+temp             : 31.95
+temp.min         : 31.95
+temp.max         : 31.95
+pressure         : 1023.00
+sea_level        : 1023.00
+grnd_level       : 840.00
+humidity         : 38
+clouds           : 37
+wind_speed       : 1.74
+wind_deg         : 232
+wind_gust        : 5.14
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 06:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03n
+
+3 hourly forecast   14
+dt (time)        : 03:00
+temp             : 31.30
+temp.min         : 31.30
+temp.max         : 31.30
+pressure         : 1023.00
+sea_level        : 1023.00
+grnd_level       : 840.00
+humidity         : 41
+clouds           : 4
+wind_speed       : 5.68
+wind_deg         : 228
+wind_gust        : 7.31
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 09:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01n
+
+3 hourly forecast   15
+dt (time)        : 06:00
+temp             : 33.94
+temp.min         : 33.94
+temp.max         : 33.94
+pressure         : 1023.00
+sea_level        : 1023.00
+grnd_level       : 841.00
+humidity         : 40
+clouds           : 16
+wind_speed       : 12.80
+wind_deg         : 276
+wind_gust        : 24.11
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 12:00:00
+id               : 801
+main             : Clouds
+description      : few clouds
+icon             : 02n
+
+3 hourly forecast   16
+dt (time)        : 09:00
+temp             : 43.86
+temp.min         : 43.86
+temp.max         : 43.86
+pressure         : 1021.00
+sea_level        : 1021.00
+grnd_level       : 842.00
+humidity         : 20
+clouds           : 1
+wind_speed       : 16.02
+wind_deg         : 292
+wind_gust        : 28.41
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 15:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   17
+dt (time)        : 12:00
+temp             : 53.10
+temp.min         : 53.10
+temp.max         : 53.10
+pressure         : 1018.00
+sea_level        : 1018.00
+grnd_level       : 841.00
+humidity         : 12
+clouds           : 5
+wind_speed       : 15.46
+wind_deg         : 297
+wind_gust        : 24.96
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 18:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   18
+dt (time)        : 15:00
+temp             : 59.43
+temp.min         : 59.43
+temp.max         : 59.43
+pressure         : 1015.00
+sea_level        : 1015.00
+grnd_level       : 840.00
+humidity         : 8
+clouds           : 0
+wind_speed       : 14.65
+wind_deg         : 295
+wind_gust        : 24.87
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-18 21:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   19
+dt (time)        : 18:00
+temp             : 58.51
+temp.min         : 58.51
+temp.max         : 58.51
+pressure         : 1015.00
+sea_level        : 1015.00
+grnd_level       : 840.00
+humidity         : 11
+clouds           : 0
+wind_speed       : 14.58
+wind_deg         : 277
+wind_gust        : 18.05
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 00:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   20
+dt (time)        : 21:00
+temp             : 48.24
+temp.min         : 48.24
+temp.max         : 48.24
+pressure         : 1019.00
+sea_level        : 1019.00
+grnd_level       : 842.00
+humidity         : 21
+clouds           : 0
+wind_speed       : 7.05
+wind_deg         : 293
+wind_gust        : 5.28
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 03:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01n
+
+3 hourly forecast   21
+dt (time)        : 00:00
+temp             : 41.90
+temp.min         : 41.90
+temp.max         : 41.90
+pressure         : 1022.00
+sea_level        : 1022.00
+grnd_level       : 843.00
+humidity         : 27
+clouds           : 0
+wind_speed       : 3.74
+wind_deg         : 281
+wind_gust        : 3.20
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 06:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01n
+
+3 hourly forecast   22
+dt (time)        : 03:00
+temp             : 39.34
+temp.min         : 39.34
+temp.max         : 39.34
+pressure         : 1022.00
+sea_level        : 1022.00
+grnd_level       : 843.00
+humidity         : 27
+clouds           : 0
+wind_speed       : 3.69
+wind_deg         : 302
+wind_gust        : 3.44
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 09:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01n
+
+3 hourly forecast   23
+dt (time)        : 06:00
+temp             : 38.41
+temp.min         : 38.41
+temp.max         : 38.41
+pressure         : 1021.00
+sea_level        : 1021.00
+grnd_level       : 842.00
+humidity         : 23
+clouds           : 0
+wind_speed       : 5.08
+wind_deg         : 301
+wind_gust        : 4.59
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 12:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01n
+
+3 hourly forecast   24
+dt (time)        : 09:00
+temp             : 50.63
+temp.min         : 50.63
+temp.max         : 50.63
+pressure         : 1019.00
+sea_level        : 1019.00
+grnd_level       : 842.00
+humidity         : 13
+clouds           : 0
+wind_speed       : 1.57
+wind_deg         : 137
+wind_gust        : 1.48
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 15:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   25
+dt (time)        : 12:00
+temp             : 62.96
+temp.min         : 62.96
+temp.max         : 62.96
+pressure         : 1015.00
+sea_level        : 1015.00
+grnd_level       : 840.00
+humidity         : 8
+clouds           : 3
+wind_speed       : 8.81
+wind_deg         : 126
+wind_gust        : 6.35
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 18:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+3 hourly forecast   26
+dt (time)        : 15:00
+temp             : 69.96
+temp.min         : 69.96
+temp.max         : 69.96
+pressure         : 1011.00
+sea_level        : 1011.00
+grnd_level       : 838.00
+humidity         : 6
+clouds           : 24
+wind_speed       : 5.95
+wind_deg         : 95
+wind_gust        : 10.16
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-19 21:00:00
+id               : 801
+main             : Clouds
+description      : few clouds
+icon             : 02d
+
+3 hourly forecast   27
+dt (time)        : 18:00
+temp             : 71.46
+temp.min         : 71.46
+temp.max         : 71.46
+pressure         : 1009.00
+sea_level        : 1009.00
+grnd_level       : 837.00
+humidity         : 8
+clouds           : 28
+wind_speed       : 10.83
+wind_deg         : 279
+wind_gust        : 12.06
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 00:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03d
+
+3 hourly forecast   28
+dt (time)        : 21:00
+temp             : 58.55
+temp.min         : 58.55
+temp.max         : 58.55
+pressure         : 1013.00
+sea_level        : 1013.00
+grnd_level       : 839.00
+humidity         : 15
+clouds           : 55
+wind_speed       : 4.18
+wind_deg         : 273
+wind_gust        : 5.12
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 03:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   29
+dt (time)        : 00:00
+temp             : 52.81
+temp.min         : 52.81
+temp.max         : 52.81
+pressure         : 1014.00
+sea_level        : 1014.00
+grnd_level       : 839.00
+humidity         : 21
+clouds           : 48
+wind_speed       : 1.50
+wind_deg         : 343
+wind_gust        : 4.18
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 06:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03n
+
+3 hourly forecast   30
+dt (time)        : 03:00
+temp             : 50.32
+temp.min         : 50.32
+temp.max         : 50.32
+pressure         : 1013.00
+sea_level        : 1013.00
+grnd_level       : 838.00
+humidity         : 23
+clouds           : 54
+wind_speed       : 3.69
+wind_deg         : 261
+wind_gust        : 3.96
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 09:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   31
+dt (time)        : 06:00
+temp             : 49.41
+temp.min         : 49.41
+temp.max         : 49.41
+pressure         : 1014.00
+sea_level        : 1014.00
+grnd_level       : 838.00
+humidity         : 26
+clouds           : 64
+wind_speed       : 4.34
+wind_deg         : 276
+wind_gust        : 4.03
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 12:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   32
+dt (time)        : 09:00
+temp             : 62.37
+temp.min         : 62.37
+temp.max         : 62.37
+pressure         : 1013.00
+sea_level        : 1013.00
+grnd_level       : 839.00
+humidity         : 17
+clouds           : 33
+wind_speed       : 1.95
+wind_deg         : 199
+wind_gust        : 5.59
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 15:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03d
+
+3 hourly forecast   33
+dt (time)        : 12:00
+temp             : 75.07
+temp.min         : 75.07
+temp.max         : 75.07
+pressure         : 1009.00
+sea_level        : 1009.00
+grnd_level       : 837.00
+humidity         : 10
+clouds           : 30
+wind_speed       : 16.82
+wind_deg         : 284
+wind_gust        : 19.51
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 18:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03d
+
+3 hourly forecast   34
+dt (time)        : 15:00
+temp             : 76.53
+temp.min         : 76.53
+temp.max         : 76.53
+pressure         : 1007.00
+sea_level        : 1007.00
+grnd_level       : 836.00
+humidity         : 10
+clouds           : 98
+wind_speed       : 17.81
+wind_deg         : 272
+wind_gust        : 19.82
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-20 21:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04d
+
+3 hourly forecast   35
+dt (time)        : 18:00
+temp             : 74.62
+temp.min         : 74.62
+temp.max         : 74.62
+pressure         : 1008.00
+sea_level        : 1008.00
+grnd_level       : 836.00
+humidity         : 12
+clouds           : 100
+wind_speed       : 17.52
+wind_deg         : 297
+wind_gust        : 19.06
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 00:00:00
+id               : 804
+main             : Clouds
+description      : overcast clouds
+icon             : 04d
+
+3 hourly forecast   36
+dt (time)        : 21:00
+temp             : 63.19
+temp.min         : 63.19
+temp.max         : 63.19
+pressure         : 1012.00
+sea_level        : 1012.00
+grnd_level       : 838.00
+humidity         : 20
+clouds           : 63
+wind_speed       : 10.16
+wind_deg         : 283
+wind_gust        : 19.64
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 03:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   37
+dt (time)        : 00:00
+temp             : 58.66
+temp.min         : 58.66
+temp.max         : 58.66
+pressure         : 1013.00
+sea_level        : 1013.00
+grnd_level       : 839.00
+humidity         : 24
+clouds           : 80
+wind_speed       : 6.51
+wind_deg         : 279
+wind_gust        : 6.49
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 06:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   38
+dt (time)        : 03:00
+temp             : 53.11
+temp.min         : 53.11
+temp.max         : 53.11
+pressure         : 1015.00
+sea_level        : 1015.00
+grnd_level       : 840.00
+humidity         : 28
+clouds           : 61
+wind_speed       : 4.59
+wind_deg         : 289
+wind_gust        : 3.87
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 09:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   39
+dt (time)        : 06:00
+temp             : 52.81
+temp.min         : 52.81
+temp.max         : 52.81
+pressure         : 1017.00
+sea_level        : 1017.00
+grnd_level       : 841.00
+humidity         : 27
+clouds           : 33
+wind_speed       : 4.54
+wind_deg         : 286
+wind_gust        : 4.05
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 12:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03n
+
+
+NTP response time was  : 29 ms
+Time since last sync is: 6.66 s
+Received NTP UTC time  : 14:34:48
+
+NTP response time was  : 30 ms
+Time since last sync is: 12.08 s
+Received NTP UTC time  : 14:35:00
+ *  Terminal will be reused by tasks, press any key to close it. 
