@@ -118,6 +118,7 @@ const char *PROGRAM_VERSION = "ESP32 CYD OpenWeatherMap LittleFS V02.1";
 
 #include "NTP_Time.h" // Attached to this sketch, see that tab for library needs
 // Time zone correction library: https://github.com/JChristensen/Timezone
+Timezone *tz = &TIMEZONE;
 
 /***************************************************************************************
 **                          Define the globals and class instances
@@ -335,24 +336,13 @@ bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t *bitmap) 
     return 1;
 }
 
-/***************************************************************************************
-**                          Setup
-***************************************************************************************/
-void setup() {
-    bool SDCardPresent = false;
-    SPIClass spi = SPIClass(VSPI);
-
-    Serial.begin(115200);
-    delay(500);
-    Serial.println(PROGRAM_VERSION);
-
-    if (SD.begin(SS, spi, 80000000)) {
+void processSDCard() {
+    if (SD.begin(SS, SPI, 80000000)) {
         uint8_t cardType = SD.cardType();
 
         if (cardType == CARD_NONE) {
             Serial.println("No SD card attached");
         } else {
-            SDCardPresent = true;
             Serial.print("SD Card Type: ");
             if (cardType == CARD_MMC) {
                 Serial.println("MMC");
@@ -371,7 +361,7 @@ void setup() {
 
             // Update settings, if available, from SD card
             if (SD.exists("/Settings.txt")) {
-                Serial.println("Found settings.txt on SD card, loading settings from there...");
+                Serial.println("... loading settings from SD card...");
                 File settingsFile = SD.open("/Settings.txt");
                 if (settingsFile) {
                     while (settingsFile.available()) {
@@ -401,6 +391,31 @@ void setup() {
                                 latitude = latitude.substring(1, latitude.length() - 1);
                             }
                             Serial.printf("Loaded Latitude: %s\n", latitude.c_str());
+                        } else if (line.startsWith("timezone=")) {
+                            String myTZ = line.substring(strlen("timezone="));
+                            if (myTZ.startsWith("\"") && myTZ.endsWith("\"")) {
+                                myTZ = myTZ.substring(1, myTZ.length() - 1);
+                            }
+                            // Set timezone handler, based on known ones from NTP_Time.h
+                            struct knownZones {
+                                const char *name;
+                                Timezone *tz;
+                            } knownTimezones[] = {
+                                {"UK", &UK},     {"ausET", &ausET}, {"euCET", &euCET}, {"usMT", &usMT},
+                                {"usPT", &usPT}, {"usCT", &usCT},   {"usET", &usET},
+                            };
+                            bool foundTZ = false;
+                            for (auto &zone : knownTimezones) {
+                                if (myTZ.equalsIgnoreCase(zone.name)) {
+                                    tz = zone.tz;
+                                    Serial.printf("Loaded Timezone: %s\n", myTZ.c_str());
+                                    foundTZ = true;
+                                    break;
+                                }
+                            }
+                            if (!foundTZ) {
+                                Serial.printf("Timezone %s not found, using default\n", myTZ.c_str());
+                            }
                         }
                     }
                     settingsFile.close();
@@ -414,6 +429,21 @@ void setup() {
     } else {
         Serial.println("Card Mount Failed");
     }
+}
+
+/***************************************************************************************
+**                          Setup
+***************************************************************************************/
+void setup() {
+    bool SDCardPresent = false;
+    SPIClass spi = SPIClass(VSPI);
+
+    Serial.begin(115200);
+    delay(500);
+    Serial.println(PROGRAM_VERSION);
+
+    // Process SD card for settings, etc.
+    processSDCard();
 
     // Set up PWM for the backlight
     // NEW Version for ESP32 Core 3.x
@@ -662,7 +692,7 @@ void drawTime() {
     drawWifiQuality(300, 1);
 
     // Convert UTC to local time, returns zone code in tz1_Code, e.g "GMT"
-    time_t local_time = TIMEZONE.toLocal(now(), &tz1_Code);
+    time_t local_time = tz->toLocal(now(), &tz1_Code);
 
     String timeNow = "";
 
@@ -690,7 +720,7 @@ void drawTime() {
 **                          Draw the current weather
 ***************************************************************************************/
 void drawCurrentWeather() {
-    time_t local_time = TIMEZONE.toLocal(now(), &tz1_Code);
+    time_t local_time = tz->toLocal(now(), &tz1_Code);
     // String date = "Updated: " + strDate(local_time);
     String date = "Updated: " + strDate(now()); // see isue https://github.com/Bodmer/OpenWeather/issues/26
     String weatherText = "None";
@@ -803,8 +833,6 @@ void drawForecastDetail(uint16_t x, uint16_t y, uint8_t dayIndex) {
 
     if (dayIndex >= MAX_DAYS * 8)
         return;
-
-    String day = shortDOW[weekday(TIMEZONE.toLocal(forecast->dt[dayIndex + 4], &tz1_Code))];
     day.toUpperCase();
 
     tft.setTextDatum(BC_DATUM);
@@ -848,7 +876,7 @@ void drawAstronomy() {
     tft.setTextColor(TFT_BLACK, TFT_LIGHTGREY);
     tft.setTextPadding(tft.textWidth(" Last qtr "));
 
-    time_t local_time = TIMEZONE.toLocal(forecast->dt[0], &tz1_Code);
+    time_t local_time = tz->toLocal(forecast->dt[0], &tz1_Code);
     uint16_t y = year(local_time);
     uint8_t m = month(local_time);
     uint8_t d = day(local_time);
