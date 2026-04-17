@@ -930,3 +930,238 @@ NTP response time was  : 30 ms
 Time since last sync is: 12.08 s
 Received NTP UTC time  : 14:35:00
  *  Terminal will be reused by tasks, press any key to close it. 
+
+---------------------------------------------------------------------------------------
+* Executing task: platformio device monitor
+
+
+Please build project in debug configuration to get more details about an exception.
+See https://docs.platformio.org/page/projectconf/build_configurations.html
+
+
+--- Terminal on /dev/ttyUSB1 | 115200 8-N-1
+--- Available filters and text transformations: debug, default, direct, esp32_exception_decoder, hexlify, log2file, nocontrol, printable, send_on_enter, time
+--- More details at https://bit.ly/pio-monitor-filters
+--- Quit: Ctrl+C | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+
+Flash FS available!
+Connecting to WiFi...Chez Thomas with password 2625426254
+..
+
+NTP response time was : 45 ms
+Time since last sync is: 8.30 s
+Received NTP UTC time : 15:45:12
+
+
+The connection to server is secure (https). Certificate not checked.
+https://api.openweathermap.org/data/2.5/forecast?lat=40.5853&lon=-105.0844&units=imperial&lang=en&appid=a1c3465d70f1aac3095135e01d9cd6d5
+
+Sending GET request to api.openweathermap.org port 443
+Header end found
+
+Parsing JSON
+
+Done in 972 ms
+
+Data points received
+Weather from OpenWeather
+
+city_name : Fort Collins
+sunrise : 06:19
+sunset : 19:39
+Latitude : 40.59
+Longitude : -105.08
+Timezone : -21600
+
+############### Forecast weather ###############
+
+3 hourly forecast 0
+dt (time) : 12:00
+temp : 63.81
+temp.min : 63.81
+temp.max : 68.97
+pressure : 1006.00
+sea_level : 1006.00
+grnd_level : 831.00
+humidity : 26
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+drawForecastDetail: dayIndex = 0, dt_txt = 2026-04-16 18:00:00
+Next detail: dayIndex = 0, dt_txt = 2026-04-16 18:00:00, max = 68.970001, min = 63.810001
+Next detail: dayIndex = 1, dt_txt = 2026-04-16 21:00:00, max = 72.660004, min = 68.849998
+Next detail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00, max = 71.849998, min = 71.849998
+Next detail: dayIndex = 3, dt_txt = 2026-04-17 03:00:00, max = 65.139999, min = 65.139999
+Next detail: dayIndex = 4, dt_txt = 2026-04-17 06:00:00, max = 60.029999, min = 60.029999
+Next detail: dayIndex = 5, dt_txt = 2026-04-17 09:00:00, max = 48.630001, min = 48.630001
+Next detail: dayIndex = 6, dt_txt = 2026-04-17 12:00:00, max = 39.599998, min = 39.599998
+Next detail: dayIndex = 7, dt_txt = 2026-04-17 15:00:00, max = 36.360001, min = 36.360001
+tmax = 72.660004, tmin = 36.360001
+drawForecastDetail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00
+Next detail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00, max = 71.849998, min = 71.849998
+Next detail: dayIndex = 3, dt_txt = 2026-04-17 03:00:00, max = 65.139999, min = 65.139999
+Next detail: dayIndex = 4, dt_txt = 2026-04-17 06:00:00, max = 60.029999, min = 60.029999
+Next detail: dayIndex = 5, dt_txt = 2026-04-17 09:00:00, max = 48.630001, min = 48.630001
+Next detail: dayIndex = 6, dt_txt = 2026-04-17 12:00:00, max = 39.599998, min = 39.599998
+Next detail: dayIndex = 7, dt_txt = 2026-04-17 15:00:00, max = 36.360001, min = 36.360001
+Next detail: dayIndex = 8, dt_txt = 2026-04-17 18:00:00, max = 41.290001, min = 41.290001
+Next detail: dayIndex = 9, dt_txt = 2026-04-17 21:00:00, max = 47.549999, min = 47.549999
+tmax = 71.849998, tmin = 36.360001
+drawForecastDetail: dayIndex = 10, dt_txt = 2026-04-18 00:00:00
+Next detail: dayIndex = 10, dt_txt = 2026-04-18 00:00:00, max = 44.959999, min = 44.959999
+Next detail: dayIndex = 11, dt_txt = 2026-04-18 03:00:00, max = 37.540001, min = 37.540001
+Next detail: dayIndex = 12, dt_txt = 2026-04-18 06:00:00, max = 31.950001, min = 31.950001
+Next detail: dayIndex = 13, dt_txt = 2026-04-18 09:00:00, max = 31.299999, min = 31.299999
+Next detail: dayIndex = 14, dt_txt = 2026-04-18 12:00:00, max = 33.939999, min = 33.939999
+Next detail: dayIndex = 15, dt_txt = 2026-04-18 15:00:00, max = 43.860001, min = 43.860001
+Next detail: dayIndex = 16, dt_txt = 2026-04-18 18:00:00, max = 53.099998, min = 53.099998
+Next detail: dayIndex = 17, dt_txt = 2026-04-18 21:00:00, max = 59.430000, min = 59.430000
+tmax = 59.430000, tmin = 31.299999
+drawForecastDetail: dayIndex = 18, dt_txt = 2026-04-19 00:00:00
+Next detail: dayIndex = 18, dt_txt = 2026-04-19 00:00:00, max = 58.509998, min = 58.509998
+Next detail: dayIndex = 19, dt_txt = 2026-04-19 03:00:00, max = 48.240002, min = 48.240002
+Next detail: dayIndex = 20, dt_txt = 2026-04-19 06:00:00, max = 41.900002, min = 41.900002
+Next detail: dayIndex = 21, dt_txt = 2026-04-19 09:00:00, max = 39.340000, min = 39.340000
+Next detail: dayIndex = 22, dt_txt = 2026-04-19 12:00:00, max = 38.410000, min = 38.410000
+Next detail: dayIndex = 23, dt_txt = 2026-04-19 15:00:00, max = 50.630001, min = 50.630001
+Next detail: dayIndex = 24, dt_txt = 2026-04-19 18:00:00, max = 62.959999, min = 62.959999
+Next detail: dayIndex = 25, dt_txt = 2026-04-19 21:00:00, max = 69.959999, min = 69.959999
+tmax = 69.959999, tmin = 38.410000
+---
+
+dt_txt           : 2026-04-21 06:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   37
+dt (time)        : 03:00
+temp             : 53.11
+temp.min         : 53.11
+temp.max         : 53.11
+pressure         : 1015.00
+sea_level        : 1015.00
+grnd_level       : 840.00
+humidity         : 28
+clouds           : 61
+wind_speed       : 4.59
+wind_deg         : 289
+wind_gust        : 3.87
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 09:00:00
+id               : 803
+main             : Clouds
+description      : broken clouds
+icon             : 04n
+
+3 hourly forecast   38
+dt (time)        : 06:00
+temp             : 52.81
+temp.min         : 52.81
+temp.max         : 52.81
+pressure         : 1017.00
+sea_level        : 1017.00
+grnd_level       : 841.00
+humidity         : 27
+clouds           : 33
+wind_speed       : 4.54
+wind_deg         : 286
+wind_gust        : 4.05
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 12:00:00
+id               : 802
+main             : Clouds
+description      : scattered clouds
+icon             : 03n
+
+3 hourly forecast   39
+dt (time)        : 09:00
+temp             : 64.20
+temp.min         : 64.20
+temp.max         : 64.20
+pressure         : 1017.00
+sea_level        : 1017.00
+grnd_level       : 842.00
+humidity         : 19
+clouds           : 0
+wind_speed       : 5.12
+wind_deg         : 138
+wind_gust        : 4.07
+visibility       : 10000
+pop              : 0.00
+
+dt_txt           : 2026-04-21 15:00:00
+id               : 800
+main             : Clear
+description      : clear sky
+icon             : 01d
+
+drawForecastDetail: dayIndex = 0, dt_txt = 2026-04-16 18:00:00
+Next detail: dayIndex = 0, dt_txt = 2026-04-16 18:00:00, max = 68.379997, min = 64.559998
+Comparing date substring: 2026-04-16 with 2026-04-16 = 0/1/0/0
+Next detail: dayIndex = 1, dt_txt = 2026-04-16 21:00:00, max = 71.529999, min = 68.580002
+Comparing date substring: 2026-04-16 with 2026-04-16 = 0/1/0/0
+Next detail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00, max = 71.849998, min = 71.849998
+Comparing date substring: 2026-04-16 with 2026-04-17 = -1/0/-1/-1
+tmax = 71.529999, tmin = 64.559998
+drawForecastDetail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00
+Next detail: dayIndex = 2, dt_txt = 2026-04-17 00:00:00, max = 71.849998, min = 71.849998
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 3, dt_txt = 2026-04-17 03:00:00, max = 65.139999, min = 65.139999
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 4, dt_txt = 2026-04-17 06:00:00, max = 60.029999, min = 60.029999
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 5, dt_txt = 2026-04-17 09:00:00, max = 48.630001, min = 48.630001
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 6, dt_txt = 2026-04-17 12:00:00, max = 39.599998, min = 39.599998
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 7, dt_txt = 2026-04-17 15:00:00, max = 36.360001, min = 36.360001
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 8, dt_txt = 2026-04-17 18:00:00, max = 41.290001, min = 41.290001
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+Next detail: dayIndex = 9, dt_txt = 2026-04-17 21:00:00, max = 47.549999, min = 47.549999
+Comparing date substring: 2026-04-17 with 2026-04-17 = 0/1/0/0
+tmax = 71.849998, tmin = 36.360001
+drawForecastDetail: dayIndex = 10, dt_txt = 2026-04-18 00:00:00
+Next detail: dayIndex = 10, dt_txt = 2026-04-18 00:00:00, max = 44.959999, min = 44.959999
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 11, dt_txt = 2026-04-18 03:00:00, max = 37.540001, min = 37.540001
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 12, dt_txt = 2026-04-18 06:00:00, max = 31.950001, min = 31.950001
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 13, dt_txt = 2026-04-18 09:00:00, max = 31.299999, min = 31.299999
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 14, dt_txt = 2026-04-18 12:00:00, max = 33.939999, min = 33.939999
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 15, dt_txt = 2026-04-18 15:00:00, max = 43.860001, min = 43.860001
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 16, dt_txt = 2026-04-18 18:00:00, max = 53.099998, min = 53.099998
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+Next detail: dayIndex = 17, dt_txt = 2026-04-18 21:00:00, max = 59.430000, min = 59.430000
+Comparing date substring: 2026-04-18 with 2026-04-18 = 0/1/0/0
+tmax = 59.430000, tmin = 31.299999
+drawForecastDetail: dayIndex = 18, dt_txt = 2026-04-19 00:00:00
+Next detail: dayIndex = 18, dt_txt = 2026-04-19 00:00:00, max = 58.509998, min = 58.509998
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 19, dt_txt = 2026-04-19 03:00:00, max = 48.240002, min = 48.240002
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 20, dt_txt = 2026-04-19 06:00:00, max = 41.900002, min = 41.900002
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 21, dt_txt = 2026-04-19 09:00:00, max = 39.340000, min = 39.340000
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 22, dt_txt = 2026-04-19 12:00:00, max = 38.410000, min = 38.410000
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 23, dt_txt = 2026-04-19 15:00:00, max = 50.630001, min = 50.630001
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 24, dt_txt = 2026-04-19 18:00:00, max = 62.959999, min = 62.959999
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+Next detail: dayIndex = 25, dt_txt = 2026-04-19 21:00:00, max = 69.959999, min = 69.959999
+Comparing date substring: 2026-04-19 with 2026-04-19 = 0/1/0/0
+tmax = 69.959999, tmin = 38.410000
