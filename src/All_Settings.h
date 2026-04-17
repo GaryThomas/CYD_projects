@@ -22,6 +22,9 @@
 // Enable API debug messages
 // #define SERIAL_MESSAGES
 
+// SD card (VFAT) manipulation examples
+// #define SD_CARD_EXAMPLES
+
 // Forecast includes today (true) or the next 4 days (false)
 #define FORECAST_INCLUDES_TODAY true
 

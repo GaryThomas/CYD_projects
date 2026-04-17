@@ -168,6 +168,7 @@ int getNextDayIndex(void);
 
 // ----------------------------
 
+#if defined(SD_CARD_EXAMPLES)
 void listDir(fs::FS &fs, const char *dirname, uint8_t levels) {
     Serial.printf("Listing directory: %s\n", dirname);
 
@@ -323,6 +324,7 @@ void testFileIO(fs::FS &fs, const char *path) {
     Serial.printf("%u bytes written for %u ms\n", 2048 * 512, end);
     file.close();
 }
+#endif
 
 bool tft_output(int16_t x, int16_t y, uint16_t w, uint16_t h, uint16_t *bitmap) {
     // Stop further decoding as image is running off bottom of screen
@@ -343,6 +345,7 @@ void processSDCard() {
         if (cardType == CARD_NONE) {
             Serial.println("No SD card attached");
         } else {
+#if defined(SD_CARD_EXAMPLES)
             Serial.print("SD Card Type: ");
             if (cardType == CARD_MMC) {
                 Serial.println("MMC");
@@ -358,7 +361,7 @@ void processSDCard() {
             Serial.printf("SD Card Size: %lluMB\n", cardSize);
 
             listDir(SD, "/", 2);
-
+#endif
             // Update settings, if available, from SD card
             if (SD.exists("/Settings.txt")) {
                 Serial.println("... loading settings from SD card...");
