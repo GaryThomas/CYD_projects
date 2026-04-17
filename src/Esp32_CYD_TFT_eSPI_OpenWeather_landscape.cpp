@@ -839,6 +839,7 @@ void drawForecastDetail(uint16_t x, uint16_t y, uint8_t dayIndex) {
 
     if (dayIndex >= MAX_DAYS * 8)
         return;
+    String day = shortDOW[weekday(tz->toLocal(forecast->dt[dayIndex + 4], &tz1_Code))];
     day.toUpperCase();
 
     tft.setTextDatum(BC_DATUM);
