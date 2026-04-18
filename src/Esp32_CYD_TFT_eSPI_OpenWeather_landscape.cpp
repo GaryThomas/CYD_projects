@@ -472,11 +472,14 @@ void setup() {
     tft.fillScreen(TFT_BLACK);
 
     if (!LittleFS.begin()) {
+        tft.loadFont(AA_FONT_SMALL, LittleFS);
+        tft.setTextDatum(BC_DATUM); // Bottom Centre datum
+        tft.setTextColor(TFT_RED, TFT_BLACK);
+        tft.drawString("No Flash FS!", 160, 120);
         Serial.println("Flash FS initialisation failed!");
         while (1)
             yield(); // Stay here twiddling thumbs waiting
     }
-    Serial.println("\nFlash FS available!");
 
 // Enable if you want to erase LittleFS, this takes some time!
 // then disable and reload sketch to avoid reformatting on every boot!
