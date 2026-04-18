@@ -434,6 +434,17 @@ void processSDCard() {
             } else {
                 Serial.println("No /Settings.txt found on SD card, using default settings");
             }
+            // Draw splash screen
+            if (SD.exists("/splash_screen.jpg") == true) {
+                uint16_t sizeX, sizeY;
+#define CENTER(screen, image) ((screen - image) / 2)
+                TJpgDec.getFsJpgSize(&sizeX, &sizeY, "/splash_screen.jpg", SD);
+                Serial.printf("Splash screen size: %dx%d\n", sizeX, sizeY);
+                TJpgDec.drawFsJpg(CENTER(320, sizeX), CENTER(240, sizeY), "/splash_screen.jpg", SD);
+                delay(3000);
+                tft.fillScreen(TFT_BLACK);
+                delay(1500);
+            }
         }
     } else {
         Serial.println("Card Mount Failed");
