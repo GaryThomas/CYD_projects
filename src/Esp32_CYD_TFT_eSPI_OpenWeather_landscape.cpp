@@ -451,9 +451,6 @@ void setup() {
     delay(500);
     Serial.println(PROGRAM_VERSION);
 
-    // Process SD card for settings, etc.
-    processSDCard();
-
     // Set up PWM for the backlight
     // NEW Version for ESP32 Core 3.x
     pinMode(TFT_BL, OUTPUT);
@@ -481,6 +478,9 @@ void setup() {
     TJpgDec.setJpgScale(1);
     TJpgDec.setCallback(tft_output);
     TJpgDec.setSwapBytes(true); // May need to swap the jpg colour bytes (endianess)
+
+    // Process SD card for settings, etc.
+    processSDCard();
 
     // Draw splash screen
     if (LittleFS.exists("/splash/OpenWeather.jpg") == true) {
