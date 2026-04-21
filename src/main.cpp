@@ -24,7 +24,9 @@
    TUTORIALS *** FULL INSTRUCTIONS AVAILABLE ON HOW CONFIGURE THE LIBRARY: https://RandomNerdTutorials.com/cyd-lvgl/ or
    https://RandomNerdTutorials.com/esp32-tft-lvgl/   */
 #include <lvgl.h>
-
+#if LV_USE_DEMO_WIDGETS // Set in <lvgl.h>
+#include "lv_demos.h"
+#endif
 /*  Install the "TFT_eSPI" library by Bodmer to interface with the TFT Display - https://github.com/Bodmer/TFT_eSPI
     *** IMPORTANT: User_Setup.h available on the internet will probably NOT work with the examples available at Random
    Nerd Tutorials ***
@@ -92,6 +94,9 @@ void touchscreen_read(lv_indev_t *indev, lv_indev_data_t *data) {
         data->state = LV_INDEV_STATE_RELEASED;
     }
 }
+
+#if LV_USE_DEMO_WIDGETS == 0
+void lv_create_main_gui(void);
 
 int btn1_count = 0;
 // Callback that is triggered when btn1 is clicked
@@ -167,6 +172,10 @@ void lv_create_main_gui(void) {
     lv_label_set_text(slider_label, "0%");
     lv_obj_align_to(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 }
+#endif
+
+// void lv_demo_widgets(void);
+// bool lv_demos_create(char *info[], int size);
 
 void setup() {
     String LVGL_Arduino =
@@ -199,8 +208,13 @@ void setup() {
     // Set the callback function to read Touchscreen input
     lv_indev_set_read_cb(indev, touchscreen_read);
 
-    // Function to draw the GUI (text, buttons and sliders)
+#if LV_USE_DEMO_WIDGETS
+    // Run LVGL builtin demo with several widgets
+    lv_demos_create(NULL, 0);
+#else
+    // Create a simple GUI with a text label, buttons and sliders
     lv_create_main_gui();
+#endif
 }
 
 void loop() {
