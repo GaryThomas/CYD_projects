@@ -21,13 +21,21 @@ class BoardCfg {
     uint32_t _handle;
     bool _started;
     bool _readOnly;
+    bool _loaded;
 
   public:
     BoardCfg();
     ~BoardCfg();
 
-    bool begin(const char *name, bool readOnly = false, const char *partition_label = NULL);
+    bool begin();
     void end();
+    void reset();
+    void update();
+    void dump();
+
+    // Board configuration fields
+    char guid[37]; // 36 chars + null terminator
+    bool valid;   // Add a validity flag to detect valid config
 };
 
 #endif //_BOARDCFG_H
