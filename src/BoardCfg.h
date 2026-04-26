@@ -34,6 +34,14 @@ class BoardCfg {
     void update();
     void dump(const char *title = nullptr);
 
+    void setDeviceName(const char *name) {
+        if (strlen(name) < sizeof(deviceName)) {
+            strncpy(deviceName, name, sizeof(deviceName));
+            deviceName[sizeof(deviceName) - 1] = '\0'; // Ensure null termination
+            _dirty = true;
+        }
+    }
+
     // Board configuration fields - stores in NVS
     char guid[37]; // 36 chars + null terminator
     char deviceName[32];

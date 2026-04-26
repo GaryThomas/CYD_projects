@@ -18,10 +18,37 @@
 
 #include <nvs.h>
 #include <nvs_flash.h>
+#include "esp_chip_info.h"
 
 BoardCfg::BoardCfg() : _started(false), _readOnly(false) {}
 
 BoardCfg::~BoardCfg() { end(); }
+
+// determined based on the constants defined in esp_chip_info.h
+const char *get_chip_model(esp_chip_model_t model) {
+    switch (model) {
+    case CHIP_ESP32:
+        return "ESP32";
+    case CHIP_ESP32S2:
+        return "ESP32-S2";
+    case CHIP_ESP32S3:
+        return "ESP32-S3";
+    case CHIP_ESP32C3:
+        return "ESP32-C3";
+    case CHIP_ESP32C2:
+        return "ESP32-C2";
+    case CHIP_ESP32C6:
+        return "ESP32-C6";
+    case CHIP_ESP32H2:
+        return "ESP32-H2";
+    case CHIP_ESP32P4:
+        return "ESP32-P4";
+    case CHIP_POSIX_LINUX:
+        return "POSIX/Linux Simulator";
+    default:
+        return "Unknown Model";
+    }
+}
 
 bool BoardCfg::begin() {
     UUID7 uuid;
@@ -33,7 +60,7 @@ bool BoardCfg::begin() {
     _dirty = false;
     // Look for existing config in NVS
     _prefs.begin("board_cfg", false);
-    if (_prefs.isKey("guid") && _prefs.getBool("_valid", true)) {
+    if (_prefs.isKey("valid") && _prefs.getBool("valid", true)) {
         String guidStr = _prefs.getString("guid", "");
         if (guidStr.length() == 36) {
             guidStr.toCharArray(guid, sizeof(guid));
@@ -51,7 +78,9 @@ bool BoardCfg::begin() {
     _started = true;
     _dirty = true;
     valid = true;
-    sprintf(deviceName, "ESP32 Device %04d", random(1000, 9999));
+    esp_chip_info_t chipInfo;
+    esp_chip_info(&chipInfo);
+    sprintf(deviceName, "%s.%04d", get_chip_model(chipInfo.model), random(1000, 9999));
     if (uuid.generate()) {
         uuid.toString(guid, sizeof(guid));
     } else {
@@ -100,7 +129,7 @@ void BoardCfg::update() {
         Serial.println("BoardCfg is read-only, cannot update");
         return;
     }
-    _prefs.putBool("_valid", true); // Add a version key to detect valid config
+    _prefs.putBool("valid", true); // Add a version key to detect valid config
     _prefs.putString("guid", guid);
     _prefs.putString("deviceName", deviceName);
     Serial.println("BoardCfg updated in NVS");
