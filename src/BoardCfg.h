@@ -18,11 +18,10 @@
 #include <Preferences.h>
 
 class BoardCfg {
-  protected:
-    uint32_t _handle;
+  private:
     bool _started;
     bool _readOnly;
-    bool _loaded;
+    bool _dirty;
     Preferences _prefs;
 
   public:
@@ -33,12 +32,12 @@ class BoardCfg {
     void end();
     void reset();
     void update();
-    void dump(char *title = nullptr);
+    void dump(const char *title = nullptr);
 
-    // Board configuration fields
+    // Board configuration fields - stores in NVS
     char guid[37]; // 36 chars + null terminator
     char deviceName[32];
-    bool valid;   // Add a validity flag to detect valid config
+    bool valid; // Add a validity flag to detect valid config
 };
 
 #endif //_BOARDCFG_H

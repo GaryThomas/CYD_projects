@@ -19,13 +19,7 @@
 #include <nvs.h>
 #include <nvs_flash.h>
 
-// const char *nvs_errors[] = {"OTHER",         "NOT_INITIALIZED",  "NOT_FOUND",    "TYPE_MISMATCH",
-//                             "READ_ONLY",     "NOT_ENOUGH_SPACE", "INVALID_NAME", "INVALID_HANDLE",
-//                             "REMOVE_FAILED", "KEY_TOO_LONG",     "PAGE_FULL",    "INVALID_STATE",
-//                             "INVALID_LENGTH"};
-// #define nvs_error(e) (((e) > ESP_ERR_NVS_BASE) ? nvs_errors[(e) & ~(ESP_ERR_NVS_BASE)] : nvs_errors[0])
-
-BoardCfg::BoardCfg() : _handle(0), _started(false), _readOnly(false) {}
+BoardCfg::BoardCfg() : _started(false), _readOnly(false) {}
 
 BoardCfg::~BoardCfg() { end(); }
 
@@ -36,9 +30,9 @@ bool BoardCfg::begin() {
     }
     valid = false;
     _readOnly = false;
+    _dirty = false;
     // Look for existing config in NVS
     _prefs.begin("board_cfg", false);
-    _loaded = false;
     if (_prefs.isKey("guid") && _prefs.getBool("_valid", true)) {
         String guidStr = _prefs.getString("guid", "");
         if (guidStr.length() == 36) {
@@ -47,7 +41,7 @@ bool BoardCfg::begin() {
         String deviceNameStr = _prefs.getString("deviceName", "");
         deviceNameStr.toCharArray(deviceName, sizeof(deviceName));
         _started = true;
-        _loaded = true;
+        _dirty = false;
         valid = true;
         return true;
     } else {
@@ -55,6 +49,7 @@ bool BoardCfg::begin() {
     }
     // Generate a new configuration and save it to NVS
     _started = true;
+    _dirty = true;
     valid = true;
     sprintf(deviceName, "ESP32 Device %04d", random(1000, 9999));
     if (uuid.generate()) {
@@ -72,12 +67,11 @@ void BoardCfg::end() {
     if (!_started) {
         return;
     }
-    nvs_close(_handle);
     _started = false;
     _prefs.end();
 }
 
-void BoardCfg::dump(char *title) {
+void BoardCfg::dump(const char *title) {
     if (!_started) {
         return;
     }
@@ -99,7 +93,7 @@ void BoardCfg::reset() {
 }
 
 void BoardCfg::update() {
-    if (!_started) {
+    if (!_started || !_dirty) {
         return;
     }
     if (_readOnly) {
@@ -110,4 +104,5 @@ void BoardCfg::update() {
     _prefs.putString("guid", guid);
     _prefs.putString("deviceName", deviceName);
     Serial.println("BoardCfg updated in NVS");
+    _dirty = false;
 }
