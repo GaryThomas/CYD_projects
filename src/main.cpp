@@ -13,6 +13,7 @@ void setup() {
     boardCfg.begin(); // Generate new config if not found, or load existing config if valid
     boardCfg.dump("Base configuration:");
     // Update the device name and save it to NVS if not set
+    Serial.printf("Current device name: %s\n", boardCfg.deviceName);
     boardCfg.end(); // Clean up resources
     sleep(5);
 
@@ -26,7 +27,15 @@ void setup() {
         boardCfg.reset(); // Reset config to defaults (generates new GUID)
         boardCfg.dump("Reset configuration:");
         boardCfg.end();
+    } else {
+        // Update the device name but don't save it to NVS to show that changes are not retained across resets
+        boardCfg.begin(); // Gain access to config to update device name
+        Serial.println("Updating device name but not saving to NVS...");
+        boardCfg.setDeviceName("New Device Name");
+        boardCfg.dump("Updated configuration (not saved):");
+        boardCfg.end();
     }
+    sleep(5);
     ESP.restart(); // Restart to show that reset config is retained across resets
 }
 
