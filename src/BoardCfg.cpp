@@ -31,34 +31,32 @@ BoardCfg::~BoardCfg() { end(); }
 
 bool BoardCfg::begin() {
     UUID7 uuid;
-    Preferences prefs;
     if (_started) {
         return false;
     }
     valid = false;
     _readOnly = false;
     // Look for existing config in NVS
-    prefs.begin("board_cfg", false);
+    _prefs.begin("board_cfg", false);
     _loaded = false;
-    if (prefs.isKey("guid") && prefs.getBool("_valid", true)) {
-        String guidStr = prefs.getString("guid", "");
+    if (_prefs.isKey("guid") && _prefs.getBool("_valid", true)) {
+        String guidStr = _prefs.getString("guid", "");
         if (guidStr.length() == 36) {
             guidStr.toCharArray(guid, sizeof(guid));
-            prefs.end();
-            _started = true;
-            _loaded = true;
-            prefs.end();
-            valid = true;
-            return true;
-        } else {
-            Serial.println("Invalid GUID found in NVS, generating a new one");
         }
+        String deviceNameStr = _prefs.getString("deviceName", "");
+        deviceNameStr.toCharArray(deviceName, sizeof(deviceName));
+        _started = true;
+        _loaded = true;
+        valid = true;
+        return true;
     } else {
-        Serial.println("No existing GUID found in NVS, generating a new one");
+        Serial.println("No valid GUID found in NVS, generating new configuration");
     }
-    prefs.end();
     // Generate a new configuration and save it to NVS
     _started = true;
+    valid = true;
+    sprintf(deviceName, "ESP32 Device %04d", random(1000, 9999));
     if (uuid.generate()) {
         uuid.toString(guid, sizeof(guid));
     } else {
@@ -76,22 +74,28 @@ void BoardCfg::end() {
     }
     nvs_close(_handle);
     _started = false;
+    _prefs.end();
 }
 
-void BoardCfg::dump() {
+void BoardCfg::dump(char *title) {
     if (!_started) {
         return;
     }
-    Serial.println("BoardCfg Dump:");
-    Serial.println("GUID: " + String(guid));}
+    if (title) {
+        Serial.println(title);
+    } else {
+        Serial.println("BoardCfg Dump:");
+    }
+    Serial.println("GUID: " + String(guid));
+    Serial.println("Device Name: " + String(deviceName));
+    Serial.println("Valid: " + String(valid));
+}
 
 void BoardCfg::reset() {
-    if (!_started) {
-        return;
-    }
-    nvs_erase_all(_handle);
-    nvs_commit(_handle);
-    Serial.println("BoardCfg reset to defaults");
+    _started = false;
+    _prefs.end();
+    nvs_flash_erase(); // Erase the entire NVS partition to reset all data
+    Serial.println("NVS erased - BoardCfg reset to defaults");
 }
 
 void BoardCfg::update() {
@@ -102,10 +106,8 @@ void BoardCfg::update() {
         Serial.println("BoardCfg is read-only, cannot update");
         return;
     }
-    Preferences prefs;
-    prefs.begin("board_cfg", false);
-    prefs.putBool("_valid", true); // Add a version key to detect valid config
-    prefs.putString("guid", guid);
-    prefs.end();
+    _prefs.putBool("_valid", true); // Add a version key to detect valid config
+    _prefs.putString("guid", guid);
+    _prefs.putString("deviceName", deviceName);
     Serial.println("BoardCfg updated in NVS");
 }

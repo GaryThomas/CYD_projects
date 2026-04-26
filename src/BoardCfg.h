@@ -15,6 +15,7 @@
 #define _BOARDCFG_H
 
 #include "Arduino.h"
+#include <Preferences.h>
 
 class BoardCfg {
   protected:
@@ -22,6 +23,7 @@ class BoardCfg {
     bool _started;
     bool _readOnly;
     bool _loaded;
+    Preferences _prefs;
 
   public:
     BoardCfg();
@@ -31,10 +33,11 @@ class BoardCfg {
     void end();
     void reset();
     void update();
-    void dump();
+    void dump(char *title = nullptr);
 
     // Board configuration fields
     char guid[37]; // 36 chars + null terminator
+    char deviceName[32];
     bool valid;   // Add a validity flag to detect valid config
 };
 
